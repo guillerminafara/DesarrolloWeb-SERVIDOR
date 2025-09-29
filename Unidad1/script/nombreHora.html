@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nombre y Hora</title>
+
+</head>
+
+<body>
+    <h1>Diferencia de ejecución cliente-servidor</h1>
+    <p id="nombre">Hola! Soy: </p>
+    <p id="hora">La hora Actual es :</p>
+    <script>
+        function nombre() {
+            const nombre= "Guillermina";
+            const hola= document.getElementById("nombre")
+            return hola.append(nombre);
+        }
+
+
+        function horaFx() {
+            const tiempo = document.getElementById("hora")
+            const fecha = new Date()
+            let teext;
+            teext = `${fecha.getHours()}:${fecha.getMinutes()}:${fecha.getSeconds()}`;
+            return tiempo.append(teext)
+        }
+        nombre()
+        horaFx()
+    </script>
+
+
+</body>
+
+</html>
