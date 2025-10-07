@@ -1,0 +1,3 @@
+no vamos a usar type= email en formulario
+tampoco vamos a usar type= number
+haremos las comprobaciones manualmente

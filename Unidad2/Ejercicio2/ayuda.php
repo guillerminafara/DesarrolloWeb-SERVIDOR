@@ -29,3 +29,5 @@
     ?>
 </body>
 </html>
+marcar => checkbox
+seleccionar= combobox
