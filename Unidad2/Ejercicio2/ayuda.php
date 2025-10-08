@@ -5,28 +5,55 @@
     <title>Permutaciones de un vector</title>
 </head>
 <body>
-    <h2>Permutaciones de un vector</h2>
-
-    <?php
-    // --- Función que realiza las permutaciones ---
-    function permutaciones(&$V) {
-        $N = count($V);
-        for ($i = 0; $i < floor($N / 2); $i++) {
-            $temp = $V[$i];
-            $V[$i] = $V[$N - 1 - $i];
-            $V[$N - 1 - $i] = $temp;
+<?php
+// 🔹 Función para crear una matriz 5x5 con M[n][m] = n + m
+function crearMatriz($filas, $columnas) {
+    $matriz = [];
+    for ($n = 0; $n < $filas; $n++) {
+        for ($m = 0; $m < $columnas; $m++) {
+            $matriz[$n][$m] = $n + $m;
         }
     }
+    return $matriz;
+}
 
-    // --- Ejemplo de uso ---
-    $V = [1, 2, 3, 4, 5, 6];
+// 🔹 Función para mostrar la matriz en formato tabla HTML
+function mostrarMatriz($matriz) {
+    echo "<table border='1' cellpadding='5' style='border-collapse:collapse; text-align:center;'>";
+    $filas = count($matriz);
+    $columnas = count($matriz[0]);
 
-    echo "<p><strong>Vector original:</strong> [" . implode(", ", $V) . "]</p>";
+    // Calcular suma de columnas
+    $sumaColumnas = array_fill(0, $columnas, 0);
 
-    permutaciones($V);
+    for ($i = 0; $i < $filas; $i++) {
+        $sumaFila = 0;
+        echo "<tr>";
+        for ($j = 0; $j < $columnas; $j++) {
+            echo "<td>{$matriz[$i][$j]}</td>";
+            $sumaFila += $matriz[$i][$j];
+            $sumaColumnas[$j] += $matriz[$i][$j];
+        }
+        echo "<td><strong>$sumaFila</strong></td>"; // suma fila
+        echo "</tr>";
+    }
 
-    echo "<p><strong>Vector permutado:</strong> [" . implode(", ", $V) . "]</p>";
-    ?>
+    // Mostrar suma de columnas
+    echo "<tr>";
+    for ($j = 0; $j < $columnas; $j++) {
+        echo "<td><strong>{$sumaColumnas[$j]}</strong></td>";
+    }
+    echo "<td><strong>—</strong></td>"; // celda vacía para alineación
+    echo "</tr>";
+
+    echo "</table>";
+}
+
+// 🔹 Programa principal
+$matriz = crearMatriz(5, 5);
+mostrarMatriz($matriz);
+?>
+
 </body>
 </html>
 marcar => checkbox

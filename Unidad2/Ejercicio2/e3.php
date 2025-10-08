@@ -18,6 +18,12 @@
         'Mou' => 2100,
         'Doggie' => 870
     ];
+    function leer($vectorAsociativo){
+        foreach ($vectorAsociativo as $key => $value) {
+            echo $key. " : ".$value;
+             echo "<br>";
+        }
+    }
     function salarioMaximo($vectorAsociativo){
         $mayor=0;
         $nombre="";
@@ -27,7 +33,7 @@
                 $nombre=$key;
             }
         }
-        echo "el salario más grande $mayor y le corresponde a $nombre";
+        echo "el salario más grande €$mayor y le corresponde a $nombre";
     };
   
     function salarioMinimo($vectorAsociativo){
@@ -39,7 +45,7 @@
                 $nombre=$key;
             }
         }
-        echo "el salario más bajo $menor y le corresponde a $nombre";
+        echo "el salario más bajo €$menor y le corresponde a $nombre";
     }
 
     function media($vectorAsociativo){
@@ -49,24 +55,34 @@
             $suma+=$value;
         }
         $media= $suma/count($vectorAsociativo);
-        echo "la media de salarios es: $media";
+        echo "la media de salarios es: €$media";
     }
 
     function incremento($vectorAsociativo, $porcentaje){
-      
+        echo "<br>";
+        echo "Los nuevos salarios con el incremento del: $porcentaje% " ;
         $vectorAsociativo2=$vectorAsociativo;
-        foreach($vectorAsociativo as $key => $value){
-            $value=$value* $porcentaje;
-            // $vectorAsociativo2;
+        foreach($vectorAsociativo2 as $key => $value){
+            $vectorAsociativo2[$key]= $value+($value*15)/100 ;
         }
+        echo "<br>";   
+        leer($vectorAsociativo2);
+        salarioMaximo($vectorAsociativo2);
+        echo "<br>";
+        salarioMinimo($vectorAsociativo2);
+        echo "<br>";
+        media($vectorAsociativo2);
+        echo "<br>";
     }
+    leer($vectorAsociativo);
     salarioMaximo($vectorAsociativo);
     echo "<br>";
     salarioMinimo($vectorAsociativo);
     echo "<br>";
     media($vectorAsociativo);
     echo "<br>";
-    incremento($vectorAsociativo, 1.15);
+    $porcentaje=15;
+    incremento($vectorAsociativo, $porcentaje);
 
     ?>
 
