@@ -41,10 +41,7 @@
         }
      
     }
-    generar20();
-    
- 
-    
+    generar20();   
     ?>
 </body>
 </html>
