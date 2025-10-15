@@ -34,7 +34,9 @@
         } else {
             if ($tipo === "euro_peseta") {
                 $resultado = $cantidad * $conversion;
-                echo "<p>💶 $cantidad € son <strong>" . number_format($resultado, 2, ',', '.') . " ptas</strong></p>";
+            echo "<p>En son  </p>";
+              
+                // echo "<p>💶 $cantidad € son <strong>" . number_format($resultado, 2, ',', '.') . " ptas</strong></p>";
             } elseif ($tipo === "peseta_euro") {
                 $resultado = $cantidad / $conversion;
                 echo "<p>💰 $cantidad ptas son <strong>" . number_format($resultado, 2, ',', '.') . " €</strong></p>";
