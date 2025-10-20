@@ -1,4 +1,3 @@
-Guillermina fara
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,50 +12,40 @@ Guillermina fara
         Conversor de Pesetas - Euros by Guillermina
     </h2>
 
-    <?php
-    if (isset($_POST['divisa'])) {
-        // if($_POST['divisa'] !== null){
-        $divisa = $_POST['divisa'] === 'EUROS' ? 'PESETAS' : 'EUROS';
-    } else {
-        $divisa = 'EUROS';
-    }
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        $cantidad = $_POST["idCantidad"];
-        $tipoDivisa = $_POST["divisa"];
-        $cambio = 166.386;
-        if (!is_numeric($cantidad) || $cantidad <= 0) {
+    <form method="POST">
+        <br>
+        <br>
+        <label>Cantidad:<input type="text" name="idCantidad" required></label>
+        <br>
+        <br>
+        <input type="radio" name="divisa" value="euros" required> De Euros a Pesetas<br>
+        <input type="radio" name="divisa" value="pesetas" required> De Pesetas a Euros<br><br>
 
-            echo "<p>Introduce una cantidad válida</p>";
-        } else {
-            if ($tipoDivisa === "EUROS") {
-                $resultado = $cantidad * $cambio;
-                echo "<p>$cantidad € son <strong>" . number_format($resultado, 2, ',', '.') . " ptas</strong></p>";
-            } else if ($tipoDivisa === "PESETA") {
-                $resultado = $cantidad / $cambio;
-                echo "<p>$cantidad ptas son <strong>" . number_format($resultado, 2, ',', '.') . " €</strong></p>";
-            }
-        }
-    }
-
-    // function validar() {}
-    ?>
-
-    <form method="post">
-        <input type="hidden" name="divisa" value="<?= $divisa ?>">
-        <br>
-        <br>
-        <button type="button">
-            <?= $divisa === 'EUROS' ? 'EUROS -> PESETAS' : 'PESETAS -> EUROS' ?>
-        </button>
-        <br>
-        <br>
-        <label>Cantidad:</label><input type="text" name="idCantidad" required>
-        <br>
-        <br>
         <button type="submit">Calcula</button>
 
     </form>
 
+    <?php
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $cambio = 166.386;
+        $cantidad = (int)$_POST["idCantidad"];
+        $moneda = $_POST["divisa"];
+        if (is_numeric($cantidad) && $cantidad > 0) {
+            if ($moneda === "euros") {
+                $resultado = $cantidad * $cambio;
+                echo "<p> -> €$cantidad son $resultado $moneda  </p>";
+            } else if ($moneda === "pesetas") {
+                $resultado = $cantidad / $cambio;
+                echo "<p> -> €$cantidad son " . number_format($resultado, 2,",", ".")." $moneda  </p>";
+            } else {
+                echo "<p>Debes seleccionar una de las opciones de conversión</p>";
+            }
+        } else {
+            echo "<p>Imgresa una cantidad válida</p>";
+        }
+    }
+
+    ?>
 </body>
 
 </html>
