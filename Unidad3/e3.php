@@ -17,15 +17,19 @@
         <br>
         <button type="submit">Comprobar</button>
     </form>
-    
+
     <?php
     function ejercicio()
     {
-        require_once"comprobaciones.php";
-       
+        require_once "comprobaciones.php";
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-             echo"<p>aver</p>"; 
             $caracter = $_POST["caracter"];
+
+            if (strlen($caracter) != 1) {
+                echo "<p>Ingresa solo 1 caracter >:( </p>";
+                return;
+            }
+
             if ($caracter !== null) {
                 if (comprobarNumeric($caracter)) {
                     echo "<p> El carácter que has ingresado es un Número</p>";
@@ -38,16 +42,14 @@
                 }
                 if (comprobarDot($caracter)) {
                     echo "<p> El carácter que has ingresado es un punto</p>";
-                }else{
-                    echo "Entra en false";
                 }
-                if(comprobarCaracter($caracter)) {  
-                        echo "<p> El carácter que has ingresado es un caracter especial</p>";
+                if (comprobarCaracter($caracter)) {
+                    echo "<p> El carácter que has ingresado es un caracter especial</p>";
                 }
                 if (comprobarEspacio($caracter)) {
                     echo "<p> El carácter que has ingresado es un Espacio</p>";
                 }
-            }else{
+            } else {
                 echo "Es null";
             }
         }

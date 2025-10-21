@@ -15,16 +15,16 @@ function comprobarMinus($valor)
 }
 
 function comprobarDot($valor){
-    return false;
-   //return chr($valor) === 46 ? true : false;
+    return strpos($valor, '.') !== false;
+//    return chr($valor) === 46 ? true : false;
 }
 function comprobarEspacio($valor){
     return ctype_space($valor)? true : false;
 }
 function comprobarCaracter($valor){
-
-    return preg_match($valor,"/[^a-zA-Z0-9]/")? true : false;
-   // chr($valor) >=33 && chr($valor)<=45 || chr($valor)>=58&& chr($valor)<=64
+    
+    return preg_match("/[^a-zA-Z0-9\s.]/", $valor)? true : false;
+ 
 }
 
 
