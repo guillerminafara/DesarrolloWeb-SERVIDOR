@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <h2>Calculando a salarios by Guillermina</h2>
+    <h2>Calculando a salarios</h2>
     <form method="POST">
         <input type="checkbox" name="seleccion" value="media"><label>Calcula la media salarial</label>
         <br><br>
@@ -43,30 +43,32 @@
 
         $aumento = $_POST["aumento"];
         $porcentaje = $_POST["porcentaje"];
+        $seleccion=[];
         $seleccion = $_POST["seleccion"];
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             leerAAsociativos($trabajadores);
-                if($seleccion==="media"){
-                    $media = calcularMedia($trabajadores);
-                    echo " <p>La media salarial es: €$media</p>";
-                 
-                }
-                if($seleccion==="minimo"){
-                    $menor = calculaSalarioMinimo($trabajadores);
-                    echo " <p>El salario más bajo es: €$menor</p>";
-                  
-                }
-                  
-                if($seleccion==="maximo"){
-                $mayor = calculaSalarioMaximo($trabajadores);
-                    echo " <p>El salario más alto es: €$mayor</p>";
-                }
-                    
+            
+            echo "<h3>----------------Salida de calculos ----------------</h3> \n ";
+
+            if ($seleccion === "media") {
+                $media = calcularMedia($trabajadores);
+                echo " <p>----->La media salarial es: €$media</p>";
             }
+            if ($seleccion === "minimo") {
+                $menor = calculaSalarioMinimo($trabajadores);
+                echo "<p>----->El salario más bajo es: €$menor</p>";
+            }
+
+            if ($seleccion === "maximo") {
+                $mayor = calculaSalarioMaximo($trabajadores);
+                echo " <p>----->El salario más alto es: €$mayor</p>";
+            }
+
 
             if ($aumento == "si") {
                 if (isset($porcentaje) && is_numeric($porcentaje)) {
+                    echo "<h3>----------------Salarios aumentados:----------------</h3>";
                     $trabajadoresAumento = calcularAumento($trabajadores, $porcentaje);
                     leerAAsociativos($trabajadoresAumento);
                 } else {
@@ -75,9 +77,9 @@
             }
         }
     }
-
     function leerAAsociativos($trabajadores)
     {
+        echo " <p>-----------------Lectura de salarios:--------------------</p>";
         foreach ($trabajadores as $nombre => $salario) {
             echo "<p> Nombre: $nombre, Salario: $salario \n</p>";
         }
@@ -106,9 +108,9 @@
 
     function calcularAumento($trabajadores, $aumento)
     {
-
         foreach ($trabajadores as $nombre => $salario) {
-            $salario = (($salario * $aumento) / 100) + $salario;
+            $trabajadores[$nombre] = (($salario * $aumento) / 100) + $salario;
+           
         }
         return $trabajadores;
     }
