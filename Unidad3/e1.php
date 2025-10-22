@@ -18,8 +18,10 @@
         <label>Cantidad:<input type="text" name="idCantidad" required></label>
         <br>
         <br>
-        <input type="radio" name="divisa" value="euros" required> De Euros a Pesetas<br>
-        <input type="radio" name="divisa" value="pesetas" required> De Pesetas a Euros<br><br>
+        <label> <input type="radio" name="divisa" value="euros" required> De Euros a Pesetas</label>
+        <br>
+        <label><input type="radio" name="divisa" value="pesetas" required> De Pesetas a Euros</label>
+        <br><br>
 
         <button type="submit">Calcula</button>
 
@@ -28,7 +30,7 @@
     <?php
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $cambio = 166.386;
-        $cantidad = (int)$_POST["idCantidad"];
+        $cantidad = (int) $_POST["idCantidad"];
         $moneda = $_POST["divisa"];
         if (is_numeric($cantidad) && $cantidad > 0) {
             if ($moneda === "euros") {
@@ -36,7 +38,7 @@
                 echo "<p> -> €$cantidad son $resultado $moneda  </p>";
             } else if ($moneda === "pesetas") {
                 $resultado = $cantidad / $cambio;
-                echo "<p> -> €$cantidad son " . number_format($resultado, 2,",", ".")." $moneda  </p>";
+                echo "<p> -> €$cantidad son " . number_format($resultado, 2, ",", ".") . " $moneda  </p>";
             } else {
                 echo "<p>Debes seleccionar una de las opciones de conversión</p>";
             }
