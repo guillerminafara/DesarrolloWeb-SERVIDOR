@@ -26,6 +26,9 @@ function comprobarCaracter($valor){
     return preg_match("/[^a-zA-Z0-9\s.]/", $valor)? true : false;
  
 }
-
+function comprobarMail($mail){
+    return preg_match(" /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/",$mail) ?true : false; 
+     
+}
 
 ?>

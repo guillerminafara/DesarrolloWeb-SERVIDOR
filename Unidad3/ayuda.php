@@ -1,111 +1,88 @@
+<?php
+// Inicializar variables
+$nombre = $_POST['nombre'] ?? '';
+$edad = $_POST['edad'] ?? '';
+$estudios = $_POST['estudios'] ?? '';
+$situacion = $_POST['situacion'] ?? [];
+$hobbies = $_POST['hobbies'] ?? [];
+$otro_hobby = $_POST['otro_hobby'] ?? '';
+
+$errores = [];
+
+// Si se presiona el botón "Validar"
+if (isset($_POST['validar']) || isset($_POST['enviar'])) {
+    if (empty($nombre)) $errores['nombre'] = "Debe introducir su nombre.";
+    if (empty($edad) || !is_numeric($edad) || $edad <= 0) $errores['edad'] = "Debe introducir una edad válida.";
+    if (empty($estudios)) $errores['estudios'] = "Debe seleccionar un nivel de estudios.";
+    if (empty($situacion)) $errores['situacion'] = "Debe seleccionar al menos una situación.";
+    if (empty($hobbies) && empty($otro_hobby)) $errores['hobbies'] = "Debe elegir o indicar al menos un hobby.";
+
+    // Si se presionó "Enviar" y no hay errores → ir a resultado.php
+    if (isset($_POST['enviar']) && empty($errores)) {
+        // Guardamos datos en sesión
+        session_start();
+        $_SESSION['datos'] = [
+            'nombre' => $nombre,
+            'edad' => $edad,
+            'estudios' => $estudios,
+            'situacion' => $situacion,
+            'hobbies' => $hobbies,
+            'otro_hobby' => $otro_hobby
+        ];
+        header("Location: resultado.php");
+        exit;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Horario</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background: #f4f4f4;
-        }
-        h2 {
-            color: #333;
-        }
-        form {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-            width: 300px;
-        }
-        label {
-            display: block;
-            margin: 8px 0;
-        }
-        button {
-            margin-top: 15px;
-            padding: 10px 15px;
-            border: none;
-            background: #0078d7;
-            color: white;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #005fa3;
-        }
-        table {
-            margin-top: 25px;
-            border-collapse: collapse;
-            background: white;
-            box-shadow: 0 0 8px rgba(0,0,0,0.2);
-        }
-        td, th {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: center;
-        }
-    </style>
+    <title>Formulario de datos personales</title>
 </head>
 <body>
-    <h2>Generador de horario</h2>
+    <h2>Formulario de recogida de datos</h2>
 
-    <form id="formHorario">
-        <label><b>Selecciona el curso:</b></label>
-        <label><input type="radio" name="curso" value="Curso 1" required> Curso 1</label>
-        <label><input type="radio" name="curso" value="Curso 2" required> Curso 2</label>
+    <form method="post" action="formulario.php">
 
-        <label><b>Módulo:</b></label>
-        <select id="modulo" required>
-            <option value="">--Selecciona--</option>
-            <option value="Programación">Programación</option>
-            <option value="Base de Datos">Base de Datos</option>
-            <option value="Sistemas">Sistemas</option>
-            <option value="Lenguajes">Lenguajes</option>
+        <label>Nombre:</label><br>
+        <input type="text" name="nombre" value="<?= htmlspecialchars($nombre) ?>">
+        <span style="color:red"><?= $errores['nombre'] ?? '' ?></span><br><br>
+
+        <label>Edad:</label><br>
+        <input type="number" name="edad" value="<?= htmlspecialchars($edad) ?>">
+        <span style="color:red"><?= $errores['edad'] ?? '' ?></span><br><br>
+
+        <label>Nivel de estudios:</label><br>
+        <select name="estudios">
+            <option value="">--Seleccione--</option>
+            <option value="Primaria" <?= $estudios == 'Primaria' ? 'selected' : '' ?>>Primaria</option>
+            <option value="Secundaria" <?= $estudios == 'Secundaria' ? 'selected' : '' ?>>Secundaria</option>
+            <option value="Bachillerato" <?= $estudios == 'Bachillerato' ? 'selected' : '' ?>>Bachillerato</option>
+            <option value="Universidad" <?= $estudios == 'Universidad' ? 'selected' : '' ?>>Universidad</option>
         </select>
+        <span style="color:red"><?= $errores['estudios'] ?? '' ?></span><br><br>
 
-        <label><b>Horas disponibles:</b></label>
-        <label><input type="checkbox" name="horas" value="8:00 - 9:00"> 8:00 - 9:00</label>
-        <label><input type="checkbox" name="horas" value="9:00 - 10:00"> 9:00 - 10:00</label>
-        <label><input type="checkbox" name="horas" value="10:00 - 11:00"> 10:00 - 11:00</label>
-        <label><input type="checkbox" name="horas" value="11:00 - 12:00"> 11:00 - 12:00</label>
+        <label>Situación actual:</label><br>
+        <label><input type="checkbox" name="situacion[]" value="Estudiando" <?= in_array('Estudiando', $situacion) ? 'checked' : '' ?>> Estudiando</label><br>
+        <label><input type="checkbox" name="situacion[]" value="Trabajando" <?= in_array('Trabajando', $situacion) ? 'checked' : '' ?>> Trabajando</label><br>
+        <label><input type="checkbox" name="situacion[]" value="Buscando empleo" <?= in_array('Buscando empleo', $situacion) ? 'checked' : '' ?>> Buscando empleo</label><br>
+        <label><input type="checkbox" name="situacion[]" value="Desempleado" <?= in_array('Desempleado', $situacion) ? 'checked' : '' ?>> Desempleado</label><br>
+        <span style="color:red"><?= $errores['situacion'] ?? '' ?></span><br><br>
 
-        <button type="submit">Generar horario</button>
+        <label>Hobbies:</label><br>
+        <label><input type="checkbox" name="hobbies[]" value="Leer" <?= in_array('Leer', $hobbies) ? 'checked' : '' ?>> Leer</label><br>
+        <label><input type="checkbox" name="hobbies[]" value="Deporte" <?= in_array('Deporte', $hobbies) ? 'checked' : '' ?>> Deporte</label><br>
+        <label><input type="checkbox" name="hobbies[]" value="Viajar" <?= in_array('Viajar', $hobbies) ? 'checked' : '' ?>> Viajar</label><br>
+        <label><input type="checkbox" name="hobbies[]" value="Cine" <?= in_array('Cine', $hobbies) ? 'checked' : '' ?>> Cine</label><br>
+        <label>Otro: <input type="text" name="otro_hobby" value="<?= htmlspecialchars($otro_hobby) ?>"></label>
+        <span style="color:red"><?= $errores['hobbies'] ?? '' ?></span><br><br>
+
+        <input type="submit" name="validar" value="Validar">
+        <input type="submit" name="enviar" value="Enviar">
+
     </form>
-
-    <div id="resultado"></div>
-
-    <script>
-        const form = document.getElementById("formHorario");
-        const resultado = document.getElementById("resultado");
-
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
-
-            const curso = document.querySelector('input[name="curso"]:checked')?.value;
-            const modulo = document.getElementById("modulo").value;
-            const horasSeleccionadas = Array.from(document.querySelectorAll('input[name="horas"]:checked'))
-                                            .map(h => h.value);
-
-            if (!curso || !modulo || horasSeleccionadas.length === 0) {
-                alert("Por favor selecciona curso, módulo y al menos una hora.");
-                return;
-            }
-
-            // Crear tabla
-            let tabla = `<h3>Horario de ${curso}</h3>`;
-            tabla += `<table><tr><th>Hora</th><th>Módulo</th></tr>`;
-
-            horasSeleccionadas.forEach(hora => {
-                tabla += `<tr><td>${hora}</td><td>${modulo}</td></tr>`;
-            });
-
-            tabla += `</table>`;
-
-            resultado.innerHTML = tabla;
-        });
-    </script>
 </body>
 </html>

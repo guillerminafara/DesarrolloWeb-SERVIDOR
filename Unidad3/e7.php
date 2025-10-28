@@ -55,8 +55,6 @@
     $cont = 0;
 
     echo "<h3>Curso seleccionado</h3>";
-
-    //  echo "asignaturas escogidas: $asignaturas <br> \n";
     
     if (!empty($asignaturas)) {
         echo "<table>";
