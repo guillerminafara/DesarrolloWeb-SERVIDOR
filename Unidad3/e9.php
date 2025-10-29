@@ -15,6 +15,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+        * {
+            font-family: sans-serif;
+            margin-left: 10px;
+        }
+
+        #mal {
+            color: red;
+        }
+
+        #bien {
+            color: green;
+        }
+
         div {
             background-color: #8bfff090;
             position: fixed;
@@ -26,57 +39,100 @@
 </head>
 
 <body>
-    <form action="formularioE9.php">
-        <label>Nombre:<input type="text" name="nombre"></label>
+    <h2>Formulario ejercicio 9 -Fara Santeyana</h2>
+    <form method="POST" action="">
+        <label>Nombre:<input type="text" name="nombre" required></label>
+        <br><br>
         <label>Edad:<input type="text" name="edad"></label>
 
         <h3>Nivel de estudios:</h3>
-        <select name="nivelEstudios">
+        <select name="nivelEstudios" required>
             <option value="">Nivel de estudios</option>
-            <option value="primaria">Primaria</option>
+            <option value="Primaria">Primaria</option>
             <option value="ESO">ESO</option>
-            <option value="bachiller">Bachiller</option>
-            <option value="formacion profesional">Formacion Profesional</option>
-            <option value="universitario">Universitario</option>
+            <option value="Bachiller">Bachiller</option>
+            <option value="Formacion profesional">Formacion Profesional</option>
+            <option value="Universitario">Universitario</option>
         </select>
         <h3>Situación Actual:</h3>
-        <br><br>
-        <label><input type="text" name="situacion[]" value="Estudiante"></label>
-        <br><br>
-        <label><input type="text" name="situacion[]" value="Trabajador"></label>
-        <br><br>
-        <label><input type="text" name="situacion[]" value="En busca de empleo"></label>
-        <br><br>
-        <label><input type="text" name="situacion[]" value="Desempleado"></label>
+        <br>
+        <label><input type="checkbox" name="situacion[]" value="Estudiante">Estudiante</label>
+        <br>
+        <label><input type="checkbox" name="situacion[]" value="Trabajador">Trabajador</label>
+        <br>
+        <label><input type="checkbox" name="situacion[]" value="En busca de empleo">En busca de empleo</label>
+        <br>
+        <label><input type="checkbox" name="situacion[]" value="Desempleado">Desempleado</label>
+        <br>
 
-
-        <label><input type="text" name="hobbies[]" value="Leer">Leer</label>
+        <h3>Hobbies</h3>
+        <label><input type="checkbox" name="hobbies[]" value="Leer">Leer</label>
+        <br>
+        <label><input type="checkbox" name="hobbies[]" value="Tejer">Tejer</label>
+        <br>
+        <label><input type="checkbox" name="hobbies[]" value="Deportes">Deportes</label>
+        <br>
+        <label><input type="checkbox" name="hobbies[]" value="Videojuegos">Videojuegos</label>
+        <br>
+        <label><input type="checkbox" name="hobbies[]" value="Viajar">Viajar</label>
+        <br>
+        <label><input type="checkbox" name="hobbies[]" value="Otros">Otros:</label>
+        <br>
+        <label> Otro: <input type="text" name="otro"></label>
         <br><br>
-        <label><input type="text" name="hobbies[]" value="Tejer">Tejer</label>
-        <br><br>
-        <label><input type="text" name="hobbies[]" value="Deportes">Deportes</label>
-        <br><br>
-        <label><input type="text" name="hobbies[]" value="Videojuegos">Videojuegos</label>
-        <br><br>
-        <label><input type="text" name="hobbies[]" value="Viajar">Viajar</label>
-        <br><br>
-        <label><input type="text" name="hobbies[]" value="Otros">Otros:</label>
-
-        <button>Validar</button> <button>Enviar</button>
+        <button type="submit" name="valida">Validar</button>
+        <button type="submit" name="enviar" formaction="salidaE9.php">Enviar</button>
+        <button type="reset">Borrar</button>
     </form>
-<p></p>
+    <p></p>
     <?php
-        if($_SERVER["REQUEST_METHOD"]==="POST"){
-            $nombre=$_POST["nombre"];
-            $edad=$_POST["edad"];
-            echo "<p>$nombre </p>";     
+    require_once "comprobaciones.php";
+    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["valida"])) {
+        $nombre = $_POST["nombre"];
+        $edad = $_POST["edad"];
+        $bandera = comprobarEdad($edad);
+        if ($bandera) {
+            echo "<p id='bien'>Edad correcta</p>";
+        } else {
+            echo "<p id='mal'>Edad errónea</p>";
         }
-
+        comprobarCasillasSituacion();
+        comprobarCasillasHobbies();
+    }
+    function comprobarEdad($edad)
+    {
+        return is_numeric($edad) && comprobarMinMax($edad);
+    }
+    function comprobarCasillasSituacion()
+    {
+        if (isset($_POST["situacion"]) && !empty($_POST["situacion"])) {
+            $situacion = $_POST["situacion"];
+            // foreach ($situacion as $opcion) {
+            //     echo htmlspecialchars($opcion);
+            //     echo "<br>";
+            // }
+            echo "<p id='bien'>Situación laboral correcta</p>";
+        } else {
+            echo "<p id='mal'>No puedes dejar casillas vacias en Situación actual</p>";
+        }
+    }
+    function comprobarCasillasHobbies()
+    {
+        if (isset($_POST["hobbies"])) {
+            $hobbies = $_POST["hobbies"];
+            if (!empty($_POST["hobbies"])) {
+                // foreach ($hobbies as $opcion) {
+                //     echo htmlspecialchars($opcion);
+                //     echo "<br>";
+                // }
+                echo "<p id='bien'>Hobbies correctos</p>";
+            } else {
+                echo "<p id='mal'>No puedes dejar casillas vacias en hobbies</p>";
+            }
+        }
+    }
     ?>
-    <div>
-        <p>Fara Santeyana María Guillermina · 2do DAW</p>
 
-    </div>
 </body>
 
 </html>

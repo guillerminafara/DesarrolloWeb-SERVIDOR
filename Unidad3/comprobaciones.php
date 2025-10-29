@@ -30,5 +30,7 @@ function comprobarMail($mail){
     return preg_match(" /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/",$mail) ?true : false; 
      
 }
-
+function comprobarMinMax($edad){
+    return $edad>0 && $edad<99 ?true :false;
+}
 ?>

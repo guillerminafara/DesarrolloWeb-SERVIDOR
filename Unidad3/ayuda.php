@@ -45,7 +45,7 @@ if (isset($_POST['validar']) || isset($_POST['enviar'])) {
 <body>
     <h2>Formulario de recogida de datos</h2>
 
-    <form method="post" action="formulario.php">
+    <form method="post" action="ayuda.php">
 
         <label>Nombre:</label><br>
         <input type="text" name="nombre" value="<?= htmlspecialchars($nombre) ?>">
