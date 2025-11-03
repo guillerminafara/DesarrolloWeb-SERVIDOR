@@ -33,14 +33,15 @@
         $situacion = $_POST["situacion"] ?? [];
         $hobbies = $_POST["hobbies"] ?? [];
         $bandera = comprobarEdad($edad);
+         echo "<h3>Datos personales: </h3>";
         if ($bandera) {
-            echo "<p>$nombre $bandera $edad</p>";
+             echo "<p>$nombre \n $edad años </p>";
         } else {
             echo "<p>Edad errónea</p>";
         }
 
-        echo "<h3>Datos personales: </h3>";
-        echo "<p>$nombre \n $edad años </p>";
+       
+       
 
         echo "<h3>Nivel de estudios: </h3>";
         echo "<p>$nivelEstudios </p>";
