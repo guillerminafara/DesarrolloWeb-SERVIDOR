@@ -17,56 +17,60 @@
         <label><input type="radio" name="elegir" value="despedida" required>Despedida</label><br><br>
 
         <button type="submit">Enviar</button>
+
     </form>
     <?php
-    $listaNombres = array();
-    $listaEleccion = array();
-    $listaNombres = $_COOKIE["nombre"];
-    $listaEleccion = $_COOKIE["elegir"];
+  
+    // $nombresAnteriores = $_COOKIE["nombre"] ?? null;
+    // $eleccionesAnteriores = $_COOKIE["elegir"] ?? null;
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        $user_name = $_POST["nombre"];
-        $elegir = $_POST["elegir"];
+        $user_name_actual = $_POST["nombre"];
+        $elegir_actual = $_POST["elegir"];
 
         $cookie_name = "user";
-        $cookie_value = $user_name;
+        $cookie_value = $user_name_actual;
         $cookie_expires = time() + (60 * 60 * 24 * 30);
         $cookie_path = "/";
         setcookie($cookie_name, $cookie_value, $cookie_expires, $cookie_path);
 
         $cookie2_name = "elegir";
-        $cookie2_value = $elegir;
+        $cookie2_value = $elegir_actual;
         $cookie2_expires = time() + (60 * 60 * 24 * 30);
         $cookie2_path = "/";
         setcookie($cookie2_name, $cookie2_value, $cookie2_expires, $cookie2_path);
 
-        if (!isset($_COOKIE[$cookie_name])) {
-            echo "No hay tal cookie " . $cookie_name;
-        }
-        else {
-            echo "<br>valor de la cookie: " . $_COOKIE[$cookie_name];
-        }
-        if (!isset($_COOKIE[$cookie2_name])) {
-            echo "<br>No hay tal cookie " . $cookie2_name;
-        }
-        else {
-            echo "<br>valor de la cookie2: " . $_COOKIE[$cookie2_name];
-        }
-        echo "<h2>salida mensaje:</h2>";
+        echo "<h2>Valor Anteriores</h2>";
+        if (!isset($_COOKIE[$cookie_name]) && !isset($_COOKIE[$cookie2_name])) {
+            echo "Aún no hay cookie almacenadas  " . $cookie_name;
+            echo "<br>Aún no hay cookie almacenadas  " . $cookie2_name;
 
-        echo "<h3>salida mensaje:</h3>";
-        saludar($_COOKIE[$cookie_value], $_COOKIE[$cookie_value]);
-        
-        echo "<h2>salida mensaje:</h2>";
+        } else {
+            echo saludar($_COOKIE[$cookie_name], $_COOKIE[$cookie2_name]);
+        }
 
-        echo "<h3>salida mensaje:</h3>";
-        saludar($_COOKIE[$cookie2_value], $_COOKIE[$cookie2_value]);
+        echo "<h2>Valor Actuales</h2>";
+
+        if (isset($user_name_actual) && isset($elegir_actual)) {
+            echo saludar($user_name_actual, $elegir_actual);
+            
+        } else {
+            echo "Aún no hay cookie almacenadas  " . $cookie_name;
+            echo "<br>Aún no hay cookie almacenadas  " . $cookie2_name;
+        }
+
+
     }
 
     function saludar($nombre, $elegir)
     {
-        // $cookie[0];
-        // echo "$cookie[0], $cookie[1]";
-        echo $elegir === "saludo" ? "Hola $nombre" : "adiós $nombre";
+        $salida = "";
+
+        if ($elegir === "saludo") {
+            $salida = "Hola $nombre";
+        } else {
+            $salida = "Adiós $nombre";
+        }
+        return $salida;
     }
     ?>
     <p><strong>Note:</strong> You might have to reload the page to see the value of
