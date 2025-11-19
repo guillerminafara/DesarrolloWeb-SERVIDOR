@@ -1,50 +1,71 @@
 <?php
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $correcta = "1234";
 
-        $num_anterior = $_COOKIE["num"] ?? "Ninguno";
-        $resultado_anterior = $_COOKIE["resultado"] ?? "Ninguno";
+    if (!isset($_COOKIE["intentos"])) {
+        setcookie("intentos", 0, time() + 30);
+        $_COOKIE["intentos"] = 0;
+    }
 
-        $num_actual = $_POST["num"];
-        $resultado = 0;
+    if (!isset($_COOKIE["historial"])) {
+        setcookie("historial", "", time() + 30);
+        $_COOKIE["historial"] = "";
+    }
 
-        if($num_actual <= 0 || $num_actual > 31){
-            $resultado = "El día no existe";
-        }else{
-            if ($num_actual <= 15){
-                $resultado = "Primera quincena. Día: $num_actual";
-            }else{
-                $resultado = "Segunda quincena. Día: $num_actual";
-            }
+    $mensaje = "";
+
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+        $pass = $_POST["pass"];
+
+        $intentos = $_COOKIE["intentos"] + 1;
+        setcookie("intentos", $intentos, time() + 30);
+        $_COOKIE["intentos"] = $intentos;
+
+        if ($_COOKIE["historial"] === "") {
+            $nuevo = $pass;
+        } else {
+            $nuevo = $_COOKIE["historial"] . "," . $pass;
         }
 
-        setcookie("num", $num_actual, time() + 3600);
-        setcookie("resultado", $resultado, time() + 3600);
+        setcookie("historial", $nuevo, time() + 30);
+        $_COOKIE["historial"] = $nuevo;
 
+        if ($pass === $correcta) {
+            $mensaje = "Contraseña correcta";
+            $_COOKIE["intentos"] = 0;
+            $_COOKIE["historial"] = "";
 
-        echo "<h3>Datos actuales:</h3>";
-        echo "Día del mes: <strong>{$resultado}</strong><br>";
-
-        echo "<h3>Datos anteriores:</h3>";
-        echo "Día del mes: <strong>{$resultado_anterior}</strong><br>";
+        } else {
+            $mensaje = "Contraseña incorrecta";
+        }
     }
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html>
     <head>
         <meta charset="UTF-8">
-        <title>Lucía Ferrandis</title>
+        <title>Caja fuerte</title>
     </head>
     <body>
-        <h2>Lucía Ferrandis Martínez</h2>
-        <hr>
-        <h2>Quincena del mes</h2>
 
-        <form method="post" action="">
-            <label>Día del mes:</label>
-            <input type="number" name="num" required><br><br>
+    <h2>Caja fuerte</h2>
 
-            <input type="submit" value="Calcular">
-        </form>
+    <form method="POST">
+        <label>Contraseña:</label>
+        <input type="text" name="pass" maxlength="4" required>
+        <button type="submit">Enviar</button>
+    </form>
+
+    <hr>
+
+    <p><?php echo $mensaje; ?></p>
+
+    <p><b>Contraseña correcta:</b> <?php echo $correcta; ?></p>
+
+    <p><b>Contraseñas introducidas:</b> <?php echo $_COOKIE["historial"]; ?></p>
+
+    <p><b>Intentos:</b> <?php echo $_COOKIE["intentos"]; ?></p>
+
     </body>
 </html>

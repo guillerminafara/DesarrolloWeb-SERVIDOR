@@ -78,12 +78,10 @@
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>Lucía Ferrandis Martínez</title>
+        <title>o</title>
     </head>
     <body>
-        <h2>Lucía Ferrandis Martínez</h2>
-        <hr>
-        <h1>Cálculo de Media, Mediana y Moda</h1>
+
 
         <form method="POST">
             <label>Cantidad:</label>

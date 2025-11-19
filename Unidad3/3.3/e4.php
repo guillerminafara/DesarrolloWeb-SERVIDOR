@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $cookie_expires = time() + (60 * 60 * 24 * 30);
         $cookie_path = "/";
         setcookie($cookie_name, $cookie_value, $cookie_expires, $cookie_path);
-        echo "no mamme";
+       
     }
 }
 
