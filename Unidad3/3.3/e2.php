@@ -1,3 +1,41 @@
+<?php
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $nombre = $_POST["nombre"];
+        $color = $_POST["color"];
+        $idioma = $_POST["idioma"];
+        $ciudad = $_POST["ciudad"];
+        $nombre_anterior;
+        $color_anterior;
+        $idioma_anterior;
+        $ciudad_anterior;
+
+        $cookie_name = "nombre";
+        $cookie_value = $nombre;
+        $cookie_expires = time() + (60 * 60 * 24 * 30);
+        $cookie_path = "/";
+        setcookie($cookie_name, $cookie_value, $cookie_expires, $cookie_path);
+
+        $cookie_name = "color";
+        $cookie_value = $color[0];
+        $cookie_expires = time() + (60 * 60 * 24 * 30);
+        $cookie_path = "/";
+        setcookie($cookie_name, $cookie_value, $cookie_expires, $cookie_path);
+
+        $cookie_name = "idioma";
+        $cookie_value = $idioma[0];
+        $cookie_expires = time() + (60 * 60 * 24 * 30);
+        $cookie_path = "/";
+        setcookie($cookie_name, $cookie_value, $cookie_expires, $cookie_path);
+
+        $cookie_name = "ciudad";
+        $cookie_value = $ciudad;
+        $cookie_expires = time() + (60 * 60 * 24 * 30);
+        $cookie_path = "/";
+        setcookie($cookie_name, $cookie_value, $cookie_expires, $cookie_path);
+       
+    }
+
+    ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,43 +78,7 @@
         <button>Enviar</button>
     </form>
     <?php
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        $nombre = $_POST["nombre"];
-        $color = $_POST["color"];
-        $idioma = $_POST["idioma"];
-        $ciudad = $_POST["ciudad"];
-        $nombre_anterior;
-        $color_anterior;
-        $idioma_anterior;
-        $ciudad_anterior;
-
-
-
-        $cookie_name = "nombre";
-        $cookie_value = $nombre;
-        $cookie_expires = time() + (60 * 60 * 24 * 30);
-        $cookie_path = "/";
-        setcookie($cookie_name, $cookie_value, $cookie_expires, $cookie_path);
-
-
-        $cookie_name = "color";
-        $cookie_value = $color[0];
-        $cookie_expires = time() + (60 * 60 * 24 * 30);
-        $cookie_path = "/";
-        setcookie($cookie_name, $cookie_value, $cookie_expires, $cookie_path);
-
-        $cookie_name = "idioma";
-        $cookie_value = $idioma[0];
-        $cookie_expires = time() + (60 * 60 * 24 * 30);
-        $cookie_path = "/";
-        setcookie($cookie_name, $cookie_value, $cookie_expires, $cookie_path);
-
-        $cookie_name = "ciudad";
-        $cookie_value = $ciudad;
-        $cookie_expires = time() + (60 * 60 * 24 * 30);
-        $cookie_path = "/";
-        setcookie($cookie_name, $cookie_value, $cookie_expires, $cookie_path);
-        echo "<h2>Valores actuales</h2>";
+     echo "<h2>Valores actuales</h2>";
         if (isset($nombre) && isset($color[0]) && isset($idioma[0]) && isset($ciudad)) {
             echo "$nombre,\n prefiere el color $color[0],\n Selección de idioma: $idioma[0], \n ciudad: $ciudad ";
         } else {
@@ -94,9 +96,6 @@
         } else {
             echo "Aún no  hay cookies almacenadas";
         }
-    }
-
-
     ?>
 </body>
 
