@@ -13,8 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // $_SESSION["usuarioActual"] =   $user_name_actual;
     // $_SESSION["elegirActual"] = $elegir_actual;
 
-    // $_SESSION["usuarioAnterior"] = $user_name_actual ?? null;
-    // $_SESSION["elegirAnterior"] = $elegir_actual ?? null;
+    $_SESSION["usuarioAnterior"] = $user_name_actual ?? null;
+    $_SESSION["elegirAnterior"] = $elegir_actual ?? null;
 }
 ?>
 <!DOCTYPE html>
@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 echo saludar($user_name_actual, $elegir_actual);
             } else {
                 echo "Aún no hay sessions almacenadas  " . $user_name_actual;
-                echo "<br>Aún no hay cookie almacenadas  " . $elegir_actual;
+               
             }
         }
         function saludar($nombre, $elegir)

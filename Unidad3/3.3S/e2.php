@@ -14,11 +14,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $_SESSION["idiomaActual"] = $idioma;
     $_SESSION["ciudadActual"] = $ciudad;
 
-    
+
     $_SESSION["nombreAnterior"] = $_SESSION["nombreActual"] ?? null;
     $_SESSION["colorAnterior"] = $_SESSION["colorActual"] ?? null;
     $_SESSION["idiomaAnterior"] = $_SESSION["idiomaActual"] ?? null;
     $_SESSION["ciudadAnterior"] = $_SESSION["ciudadActual"] ?? null;
+
+  
 }
 
 ?>
@@ -44,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <body>
     <div id="titulo">
-        <h2>Ejercicio 1 - Guillermina Fara </h2>
+        <h2>Ejercicio 2 - Guillermina Fara </h2>
     </div>
     <form method="POST">
         <label> Nombre: <input type="text" name="nombre" required></label>
@@ -73,22 +75,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </form>
     <?php
     echo "<h2>Valores actuales</h2>";
-    if (isset($nombre) && isset($color[0]) && isset($idioma[0]) && isset($ciudad)) {
-        echo "$nombre,\n prefiere el color $color[0],\n Selección de idioma: $idioma[0], \n ciudad: $ciudad ";
+    if (isset($nombre) && isset($color) && isset($idioma) && isset($ciudad)) {
+        echo "$nombre,\n prefiere el color $color,\n Selección de idioma: $idioma, \n ciudad: $ciudad ";
     } else {
-        echo "Aún no  hay cookies almacenadas";
+        echo "Aún no  hay valores almacenadas";
     }
 
     echo "<h2>Valores anteriores</h2>";
 
-    if (isset($_COOKIE["nombre"]) && isset($_COOKIE["color"]) && isset($_COOKIE["idioma"]) && isset($_COOKIE["ciudad"])) {
-        $nombre_anterior = $_COOKIE['nombre'];
-        $color_anterior = $_COOKIE["color"];
-        $idioma_anterior = $_COOKIE["idioma"];
-        $ciudad_anterior = $_COOKIE["ciudad"];
+    if (isset($_SESSION["nombreAnterior"]) && isset($_SESSION["colorAnterior"]) && isset($_SESSION["idiomaAnterior"]) && isset($_SESSION["ciudadAnterior"])) {
+        $nombre_anterior = $_SESSION['nombreAnterior'];
+        $color_anterior = $_SESSION["colorAnterior"];
+        $idioma_anterior = $_SESSION["idiomaAnterior"];
+        $ciudad_anterior = $_SESSION["ciudadAnterior"];
         echo "$nombre_anterior,\n prefiere el color $color_anterior,\n Selección de idioma: $idioma_anterior, \n ciudad: $ciudad_anterior ";
+    
+      session_destroy();
     } else {
-        echo "Aún no  hay cookies almacenadas";
+        echo "Aún no  hay sesiones almacenadas";
     }
     ?>
 </body>
