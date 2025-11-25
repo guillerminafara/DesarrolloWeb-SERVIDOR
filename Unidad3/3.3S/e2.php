@@ -1,15 +1,16 @@
 <?php
 session_start();
 
+$nombre_anterior = $_SESSION['nombreAnterior'];
+$color_anterior = $_SESSION["colorAnterior"];
+$idioma_anterior = $_SESSION["idiomaAnterior"];
+$ciudad_anterior = $_SESSION["ciudadAnterior"];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nombre = $_POST["nombre"];
     $color = $_POST["color"][0];
     $idioma = $_POST["idioma"][0];
     $ciudad = $_POST["ciudad"];
-    $nombre_anterior;
-    $color_anterior;
-    $idioma_anterior;
-    $ciudad_anterior;
+
     $_SESSION["nombreActual"] = $nombre;
     $_SESSION["colorActual"] = $color;
     $_SESSION["idiomaActual"] = $idioma;
@@ -78,10 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     echo "<h2>Valores anteriores</h2>";
 
     if (isset($_SESSION["nombreAnterior"]) && isset($_SESSION["colorAnterior"]) && isset($_SESSION["idiomaAnterior"]) && isset($_SESSION["ciudadAnterior"])) {
-        $nombre_anterior = $_SESSION['nombreAnterior'];
-        $color_anterior = $_SESSION["colorAnterior"];
-        $idioma_anterior = $_SESSION["idiomaAnterior"];
-        $ciudad_anterior = $_SESSION["ciudadAnterior"];
+
         echo "$nombre_anterior,\n prefiere el color $color_anterior,\n Selección de idioma: $idioma_anterior, \n ciudad: $ciudad_anterior ";
 
         session_destroy();

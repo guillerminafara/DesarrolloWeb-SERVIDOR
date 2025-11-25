@@ -1,5 +1,9 @@
 <?php
 session_start();
+$n1Anterior = $_SESSION["primerNumero"];
+$n2Anterior = $_SESSION["segundoNumero"];
+$operacioinesAnteriores = $_SESSION["operacion"];
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $n1 = $_POST["primerNumero"];
     $n2 = $_POST["segundoNumero"];
@@ -8,14 +12,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION["primerNumero"] = $n1;
         $_SESSION["segundoNumero"] = $n2;
         $_SESSION["operacion"] = $operaciones;
-
     }
 }
-function salidaAnterior()
+function salidaAnterior($n1Anterior, $n2Anterior, $operacioinesAnteriores)
 {
-    $n1Anterior = $_SESSION["primerNumero"];
-    $n2Anterior = $_SESSION["segundoNumero"];
-    $operacioinesAnteriores= $_SESSION["operacion"];
+    // $n1Anterior = $_SESSION["primerNumero"];
+    // $n2Anterior = $_SESSION["segundoNumero"];
+    // $operacioinesAnteriores = $_SESSION["operacion"];
     echo "<p> Primer número: $n1Anterior</p>";
     echo "<p> Segundo Número $n2Anterior </p>";
     echo "<p> Operaciones: </p>";
@@ -146,29 +149,28 @@ function dividir($n1, $n2)
         </fieldset>
     </form>
     <?php
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        if (is_numeric($n1) && is_numeric($n2)) {
-            echo "<h2>Resultados Actuales</h2>";
-            if (isset($n1) && isset($n2) && isset($operaciones)) {
-                salidaActual($n1, $n2, $operaciones);
-            } else {
-                echo "<p>Aún no hay valores almacenados </p>";
-            }
 
-            echo "<h2>Resultados Anteriores</h2>";
-            if (isset($_SESSION["primerNumero"]) && isset($_SESSION["segundoNumero"]) && isset($_SESSION["operacion"])) {
-                // $n1Anterior = $_SESSION["primerNumero"];
-                // $n2Anterior = $_SESSION["segundoNumero"];
-                // $operacioinesAnteriores = $_SESSION["operacion"];
-
-                salidaAnterior();
-            } else {
-                echo "<p>Aún no hay valores almacenados </p>";
-            }
-        } else {
-            echo "<p id='mal'>Datos incorrectos, ingresa números</p>";
-        }
+    if (isset($n1) && isset($n2) && isset($operaciones)) {
+        salidaActual($n1, $n2, $operaciones);
+    } else {
+        echo "<p>Aún no hay valores almacenados </p>";
     }
+    if (is_numeric($n1) && is_numeric($n2)) {
+        echo "<h2>Resultados Actuales</h2>";
+
+
+        echo "<h2>Resultados Anteriores</h2>";
+        if (isset($_SESSION["primerNumero"]) && isset($_SESSION["segundoNumero"]) && isset($_SESSION["operacion"])) {
+
+
+            salidaAnterior($n1Anterior, $n2Anterior, $operacioinesAnteriores);
+        } else {
+            echo "<p>Aún no hay valores almacenados </p>";
+        }
+    } else {
+        echo "<p id='mal'>Datos incorrectos, ingresa números</p>";
+    }
+
     ?>
 </body>
 

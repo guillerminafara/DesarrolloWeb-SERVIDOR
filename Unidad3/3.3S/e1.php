@@ -1,9 +1,7 @@
 <?php
-// ini_set("session.use_trans_sid", "1");
-// ini_set("session.use_cookies", "0");
-// ini_set("session.use_only_cookies", 0);
-
 session_start();
+$usuarioAnterior=$_SESSION["usuarioAnterior"]; 
+$eleccionAnterior=$_SESSION["elegirAnterior"];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $user_name_actual = $_POST["nombre"];
     $elegir_actual = $_POST["elegir"];
@@ -40,14 +38,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <button type="submit">Enviar</button>
         <?php
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
 
             echo "<h2>Valor Anteriores</h2>";
             if (!isset($_SESSION["usuarioAnterior"]) && !isset($_SESSION["elegirAnterior"])) {
                 echo "Aún no hay datos almacenadas  " . $_SESSION["usuarioAnterior"];
-                echo "<br>Aún no hay datos almacenadas  " . $_SESSION["elegirAnterior"];
+          
             } else {
-                echo saludar($_SESSION["usuarioAnterior"], $_SESSION["elegirAnterior"]);
+                echo saludar($usuarioAnterior, $eleccionAnterior);
             }
 
             echo "<h2>Valor Actuales</h2>";
@@ -58,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 echo "Aún no hay sessions almacenadas  " . $user_name_actual;
                
             }
-        }
+        
         function saludar($nombre, $elegir)
         {
             $salida = "";
