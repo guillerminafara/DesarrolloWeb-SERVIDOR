@@ -1,25 +1,17 @@
 <?php
-session_start();
-$diaAnterior = $_SESSION["dia"];
-$quincenaAnterior = $_SESSION["quincena"];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $dia = $_POST["dia"];
 
-    if (is_numeric($dia) && $dia > 0 && $dia < 32) {
+    $dia = $_POST["dia"];
+    if (isset($dia) && is_numeric($dia) && $dia > 0 && $dia < 32) {
         $_SESSION["dia"] = $dia;
         $_SESSION["quincena"] = quincena($dia);
     }
-
-}
-function quincena($dia)
-{
-
-    return ($dia <= 15) ? "Primera quincena" : "Segunda Quincena";
 }
 
-function salida($dia, $quincena)
+function salida()
 {
-
+    $dia = $_SESSION["dia"];
+    $quincena = $_SESSION["quincena"];
     echo "<p> Día: $dia. Se encuentra en la  $quincena </p>";
     echo "<p> </p>";
 }
@@ -43,30 +35,35 @@ function salida($dia, $quincena)
         <label>Ingresa el dia: <input type="text" name="dia" required></label>
         <button type="submit"> Calcular </button>
     </form>
-    <h3></h3>
     <?php
-    echo "<h3>Salida Actual:</h3>";
-    if (isset($dia)) {
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $dia = $_POST["dia"];
         if (is_numeric($dia) && $dia > 0 && $dia < 32) {
-            salida($dia, quincena($dia));
+            echo "<h3>Salida Actual: </h3>";
 
+            if (isset($dia)) {
+                $quincena = quincena($dia);
+                echo " <p>El dia $dia se encuentra en la $quincena</p>";
+            } else {
+                echo "<p>Aún no hay valores almacenados </p>";
+            }
         } else {
             echo "<p id='mal'>Datos incorrectos, ingresa números entre 1 y 31</p>";
         }
-    } else {
-        echo "<p>Aún no hay datos almacenados </p>";
+        echo "<h3>Salida Anterior: </h3>";
+        if (isset($_SESSION["dia"]) && isset($_SESSION["quincena"])) {
 
+            salida();
+        } else {
+            echo "Aún no hay sessiones almacenadas</p>";
+        }
     }
-
-
-    echo "<h3>Salida Anterior:</h3>";
-
-    if (isset($_SESSION["dia"])) {
-        salida($diaAnterior, quincena($diaAnterio));
-
-    } else {
-        echo "<p>Aún no hay datos almacenados </p>";
+    function quincena($dia)
+    {
+        return ($dia <= 15) ? "Primera quincena" : "Segunda Quincena";
     }
+    session_destroy();c
+
     ?>
 </body>
 

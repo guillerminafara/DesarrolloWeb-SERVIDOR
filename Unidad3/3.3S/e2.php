@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nombre = $_POST["nombre"];
     $color = $_POST["color"][0];
@@ -14,13 +15,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $_SESSION["idiomaActual"] = $idioma;
     $_SESSION["ciudadActual"] = $ciudad;
 
-
-    $_SESSION["nombreAnterior"] = $_SESSION["nombreActual"] ?? null;
-    $_SESSION["colorAnterior"] = $_SESSION["colorActual"] ?? null;
-    $_SESSION["idiomaAnterior"] = $_SESSION["idiomaActual"] ?? null;
-    $_SESSION["ciudadAnterior"] = $_SESSION["ciudadActual"] ?? null;
-
-  
 }
 
 ?>
@@ -89,11 +83,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $idioma_anterior = $_SESSION["idiomaAnterior"];
         $ciudad_anterior = $_SESSION["ciudadAnterior"];
         echo "$nombre_anterior,\n prefiere el color $color_anterior,\n Selección de idioma: $idioma_anterior, \n ciudad: $ciudad_anterior ";
-    
-      session_destroy();
+
+        session_destroy();
     } else {
         echo "Aún no  hay sesiones almacenadas";
     }
+
+    $_SESSION["nombreAnterior"] = $_SESSION["nombreActual"] ?? null;
+    $_SESSION["colorAnterior"] = $_SESSION["colorActual"] ?? null;
+    $_SESSION["idiomaAnterior"] = $_SESSION["idiomaActual"] ?? null;
+    $_SESSION["ciudadAnterior"] = $_SESSION["ciudadActual"] ?? null;
     ?>
 </body>
 
