@@ -1,5 +1,5 @@
 <?php
-  $historial=[];
+$historial = [];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $codigoRan = $_POST["codigoRan"];
     $contador = intval($_POST["contador"]);
@@ -7,11 +7,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $codigoRan = strval(rand(0, 9999));
     $contador = 0;
 }
-if(isset($_COOKIE["historial"])){
-    $historial= explode(",", $_COOKIE["historial"]);
+if (isset($_COOKIE["historial"])) {
+    $historial = explode(",", $_COOKIE["historial"]);
 }
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  
+
     $combinacion = trim($_POST["combinacion"]);
     $historial[] = $combinacion;
     $cookie_value = $codigoRan;
@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         echo "<ul>";
 
         foreach ($historial as $inten) {
-   
+
             echo "<li>$inten</li>";
         }
         echo "</ul>";

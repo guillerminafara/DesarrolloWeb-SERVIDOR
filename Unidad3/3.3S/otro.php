@@ -1,5 +1,32 @@
+<?php
+session_start();
+
+// Inicializar variables para evitar warnings
+$multiplicando = "";
+$multiplicador = "";
+$producto = "";
+
+// Guardamos valores anteriores (si existen)
+$multiplicandoAnterior = isset($_SESSION["multiplicando"]) ? $_SESSION["multiplicando"] : "";
+$multiplicadorAnterior = isset($_SESSION["multiplicador"]) ? $_SESSION["multiplicador"] : "";
+$productoAnterior = isset($_SESSION["producto"]) ? $_SESSION["producto"] : "";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    $multiplicando = $_POST["multiplicando"];
+    $multiplicador = $_POST["multiplicador"];
+    $producto = $multiplicando * $multiplicador;
+
+    if (is_numeric($multiplicando) && is_numeric($multiplicador)) {
+        $_SESSION["multiplicando"] = $multiplicando;
+        $_SESSION["multiplicador"] = $multiplicador;
+        $_SESSION["producto"] = $producto;
+    }
+}
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -8,79 +35,37 @@
 </head>
 
 <body>
+    <div id="titulo">
+        <h2>Ejercicio 6 Tabla de multiplicar - Guillermina Fara</h2>
+    </div>
 
     <form method="POST">
-        <br>
-        <br>
-        <label>Cantidad:<input type="text" name="idCantidad" required></label>
-        <br>
-        <br>
-        <label> <input type="radio" name="divisa" value="euros" required> De Euros a Pesetas</label>
-        <br>
-        <label><input type="radio" name="divisa" value="pesetas" required> De Pesetas a Euros</label>
-        <br><br>
+        <label>Ingresa un número para el multiplicando:
+            <input type="text" name="multiplicando" required>
+        </label><br><br>
 
-        <button type="submit">Calcula</button>
-        <?php
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $cantidadActual = intval($_POST["idCantidad"]);
-            $divisaActual = $_POST["divisa"];
-            if (is_numeric($cantidadActual) && $cantidadActual > 0) {
-                $cookie_name = "cantidad";
-                $cookie_value = $cantidadActual;
-                $cookie_expires = time() + (60 * 60 * 24 * 30);
-                $cookie_path = "/";
-                setcookie($cookie_name, $cookie_value, $cookie_expires, $cookie_path);
+        <label>Ingresa un número para el multiplicador:
+            <input type="text" name="multiplicador" required>
+        </label><br><br>
 
-                $cookie_name = "divisa";
-                $cookie_value = $divisaActual;
-                $cookie_expires = time() + (60 * 60 * 24 * 30);
-                $cookie_path = "/";
-                setcookie($cookie_name, $cookie_value, $cookie_expires, $cookie_path);
+        <button type="submit">Enviar</button>
+    </form>
 
-                $resultadoActual;
-                $cambio = 166.386;
-                // $resultadoActual = resultado($cantidadActual, $moneda) ;
-                if (is_numeric($cantidadActual) && $cantidadActual > 0) {
-                    if ($divisaActual === "euros") {
-                        $resultadoActual = $cantidadActual * $cambio;
-                        // echo "<p> -> €$cantidad son $resultado $moneda  </p>";
-                    } else if ($divisaActual === "pesetas") {
-                        $resultadoActual = $cantidadActual / $cambio;
-                        // echo "<p> -> €$cantidad son ".number_format($resultado, 2, ",", "."). " $moneda  </p>";
-                    }
-                }
-                if ($resultadoActual) {
-                    $cookie_name = "resultado";
+    <!-- Salida Actual -->
+    <h3>Salida Actual</h3>
+    <?php if ($_SERVER["REQUEST_METHOD"] === "POST") : ?>
+        <p><?= $multiplicando ?> x <?= $multiplicador ?> = <?= $producto ?></p>
+    <?php else : ?>
+        <p>Aún no se ha ingresado una operación.</p>
+    <?php endif; ?>
 
-                    $cookie_value = $resultadoActual;
-                    $cookie_expires = time() + (60 * 60 * 24 * 30);
-                    $cookie_path = "/";
-                    setcookie($cookie_name, $cookie_value, $cookie_expires, $cookie_path);
-
-                }
-
-                echo "<h3>Resultado Actual:</h3>";
-                echo "$cantidadActual $divisaActual es $resultadoActual";
-                echo "<h3>Resultado Anterior:</h3>";
-
-                if (isset($_COOKIE["resultado"])) {
-                    $cantidadAnterior = $_COOKIE["cantidad"];
-                    $divisaAnterior = $_COOKIE['divisa'];
-                    $resultadoAnterior = $_COOKIE["resultado"];
-
-                    echo "$cantidadAnterior $divisaAnterior es $resultadoAnterior ";
-                } else {
-                    echo "Aún no hay cookie almacenadas  ";
-                }
-
-
-            }
-        }
-
-        ?>
-
+    <!-- Salida Anterior -->
+    <h3>Salida Anterior</h3>
+    <?php if ($multiplicandoAnterior !== "") : ?>
+        <p><?= $multiplicandoAnterior ?> x <?= $multiplicadorAnterior ?> = <?= $productoAnterior ?></p>
+    <?php else : ?>
+        <p>Aún no hay datos almacenados.</p>
+    <?php endif; ?>
 
 </body>
-
 </html>
