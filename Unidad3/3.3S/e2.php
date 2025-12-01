@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-$nombre_anterior = $_SESSION['nombreAnterior'];
-$color_anterior = $_SESSION["colorAnterior"];
-$idioma_anterior = $_SESSION["idiomaAnterior"];
-$ciudad_anterior = $_SESSION["ciudadAnterior"];
+$nombre_anterior = $_SESSION['nombreAnterior'] ?? "Aún no hay datos";
+$color_anterior = $_SESSION["colorAnterior"] ?? "Aún no hay datos";
+$idioma_anterior = $_SESSION["idiomaAnterior"]?? "Aún no hay datos";
+$ciudad_anterior = $_SESSION["ciudadAnterior"] ?? "Aún no hay datos";
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nombre = $_POST["nombre"];
     $color = $_POST["color"][0];

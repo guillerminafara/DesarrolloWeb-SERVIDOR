@@ -1,8 +1,8 @@
 <?php
 session_start();
-$n1Anterior = $_SESSION["primerNumero"];
-$n2Anterior = $_SESSION["segundoNumero"];
-$operacioinesAnteriores = $_SESSION["operacion"];
+$n1Anterior = $_SESSION["primerNumero"] ?? "Aún no hay datos";
+$n2Anterior = $_SESSION["segundoNumero"] ?? "Aún no hay datos";
+$operacioinesAnteriores = $_SESSION["operacion"] ?? "Aún no hay datos";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $n1 = $_POST["primerNumero"];
@@ -149,17 +149,19 @@ function dividir($n1, $n2)
         </fieldset>
     </form>
     <?php
+    echo "<h2>Resultados Actuales</h2>";
 
     if (isset($n1) && isset($n2) && isset($operaciones)) {
-        salidaActual($n1, $n2, $operaciones);
+        if (is_numeric($n1) && is_numeric($n2)) {
+            salidaActual($n1, $n2, $operaciones);
+        }
     } else {
         echo "<p>Aún no hay valores almacenados </p>";
     }
-    if (is_numeric($n1) && is_numeric($n2)) {
-        echo "<h2>Resultados Actuales</h2>";
+    echo "<h2>Resultados Anteriores</h2>";
 
+    if (is_numeric($n1Anterior) && is_numeric($n2Anterior)) {
 
-        echo "<h2>Resultados Anteriores</h2>";
         if (isset($_SESSION["primerNumero"]) && isset($_SESSION["segundoNumero"]) && isset($_SESSION["operacion"])) {
 
 
@@ -168,9 +170,8 @@ function dividir($n1, $n2)
             echo "<p>Aún no hay valores almacenados </p>";
         }
     } else {
-        echo "<p id='mal'>Datos incorrectos, ingresa números</p>";
+        echo "<p>DAtos inconrrectis </p>";
     }
-
     ?>
 </body>
 

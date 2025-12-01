@@ -1,7 +1,7 @@
 <?php
 session_start();
-$diaAnterior = $_SESSION["dia"];
-$quincenaAnterior = $_SESSION["quincena"];
+$diaAnterior = $_SESSION["dia"] ?? "Aún no hay datos almacenados";
+$quincenaAnterior = $_SESSION["quincena"]?? "Aún no hay datos almacenados";
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $dia = $_POST["dia"];
 
@@ -62,7 +62,7 @@ function salida($dia, $quincena)
     echo "<h3>Salida Anterior:</h3>";
 
     if (isset($_SESSION["dia"])) {
-        salida($diaAnterior, quincena($diaAnterio));
+        salida($diaAnterior, quincena($diaAnterior));
 
     } else {
         echo "<p>Aún no hay datos almacenados </p>";

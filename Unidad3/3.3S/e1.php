@@ -1,7 +1,7 @@
 <?php
 session_start();
-$usuarioAnterior=$_SESSION["usuarioAnterior"]; 
-$eleccionAnterior=$_SESSION["elegirAnterior"];
+$usuarioAnterior = $_SESSION["usuarioAnterior"] ?? "Aún no hay datos";
+$eleccionAnterior = $_SESSION["elegirAnterior"] ?? "Aún no hay datos";
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $user_name_actual = $_POST["nombre"];
     $elegir_actual = $_POST["elegir"];
@@ -40,23 +40,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <?php
 
 
-            echo "<h2>Valor Anteriores</h2>";
-            if (!isset($_SESSION["usuarioAnterior"]) && !isset($_SESSION["elegirAnterior"])) {
-                echo "Aún no hay datos almacenadas  " . $_SESSION["usuarioAnterior"];
-          
-            } else {
-                echo saludar($usuarioAnterior, $eleccionAnterior);
-            }
+        echo "<h2>Valor Anteriores</h2>";
+        if (isset($usuarioAnterior) && isset($_SESSION["elegirAnterior"])) {
+            echo saludar($usuarioAnterior, $eleccionAnterior);
+        } else {
+            echo "Aún no hay datos almacenadas  " ;
+        }
 
-            echo "<h2>Valor Actuales</h2>";
+        echo "<h2>Valor Actuales</h2>";
 
-            if (isset($user_name_actual) && isset($elegir_actual)) {
-                echo saludar($user_name_actual, $elegir_actual);
-            } else {
-                echo "Aún no hay sessions almacenadas  " . $user_name_actual;
-               
-            }
-        
+        if (isset($user_name_actual) && isset($elegir_actual)) {
+            echo saludar($user_name_actual, $elegir_actual);
+        } else {
+            echo "Aún no hay sessions almacenadas  " ;
+        }
+
         function saludar($nombre, $elegir)
         {
             $salida = "";
