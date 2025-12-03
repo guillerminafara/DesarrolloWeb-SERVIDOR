@@ -1,70 +1,139 @@
 <?php
+session_start();
+
+/* === INICIALIZACIÓN DE SESIÓN === */
+if (!isset($_SESSION["codigo"])) {
+    $_SESSION["codigo"] = strval(rand(1000, 9999));
+    $_SESSION["contador"] = 0;
+    $_SESSION["historial_actual"] = [];
+    $_SESSION["historial_anterior"] = [];
+}
+
+$codigoRan = $_SESSION["codigo"];
+$contador  = $_SESSION["contador"];
+$historialActual = $_SESSION["historial_actual"];
+$historialAnterior = $_SESSION["historial_anterior"];
+
+$mensaje = "";
+
+/* === PROCESO DEL FORMULARIO === */
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $dia = $_POST["dia"];
-    if (isset($dia) && is_numeric($dia) && $dia > 0 && $dia < 32) {
-        $_SESSION["dia"] = $dia;
-        $_SESSION["quincena"] = quincena($dia);
+    $combinacion = trim($_POST["combinacion"]);
+    $contador++;
+    $_SESSION["contador"] = $contador;
+
+    $historialActual[] = $combinacion;
+    $_SESSION["historial_actual"] = $historialActual;
+
+    if (!is_numeric($combinacion)) {
+
+        $mensaje = "<p id='mal'>Ingresa solamente números</p>";
+
+    } elseif ($combinacion === $codigoRan) {
+
+        $mensaje = "<p id='bien'>Has acertado la contraseña en $contador intentos</p>";
+
+        $historialAnterior[] = [
+            "intentos" => $historialActual,
+            "resultado" => "ÉXITO",
+            "codigo" => $codigoRan
+        ];
+
+        $_SESSION["historial_anterior"] = $historialAnterior;
+
+        // Reiniciar sesión
+        reiniciarCaja();
+
+    } else {
+
+        $mensaje = "<p id='mal'>Contraseña incorrecta ($contador / 4)</p>";
+
+        if ($contador >= 4) {
+
+            $mensaje = "<p id='mal'>Has agotado los intentos</p>";
+
+            $historialAnterior[] = [
+                "intentos" => $historialActual,
+                "resultado" => "FALLO",
+                "codigo" => $codigoRan
+            ];
+
+            $_SESSION["historial_anterior"] = $historialAnterior;
+
+            // Reiniciar sesión
+            reiniciarCaja();
+        }
     }
 }
 
-function salida()
+function reiniciarCaja()
 {
-    $dia = $_SESSION["dia"];
-    $quincena = $_SESSION["quincena"];
-    echo "<p> Día: $dia. Se encuentra en la  $quincena </p>";
-    echo "<p> </p>";
+    $_SESSION["codigo"] = strval(rand(1000, 9999));
+    $_SESSION["contador"] = 0;
+    $_SESSION["historial_actual"] = [];
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Caja Fuerte con Sesiones</title>
+    <style>
+        #bien { color: green; }
+        #mal  { color: red; }
+    </style>
 </head>
 
 <body>
-    <div id="titulo">
-        <h2>Ejercicio 4 - Guillermina Fara </h2>
-    </div>
 
-    <form method="POST">
-        <h2>Calcular semana del mes</h2>
-        <label>Ingresa el dia: <input type="text" name="dia" required></label>
-        <button type="submit"> Calcular </button>
-    </form>
-    <?php
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        $dia = $_POST["dia"];
-        if (is_numeric($dia) && $dia > 0 && $dia < 32) {
-            echo "<h3>Salida Actual: </h3>";
+<h2>Ejercicio 7 Caja Fuerte - SESIONES</h2>
 
-            if (isset($dia)) {
-                $quincena = quincena($dia);
-                echo " <p>El dia $dia se encuentra en la $quincena</p>";
-            } else {
-                echo "<p>Aún no hay valores almacenados </p>";
-            }
-        } else {
-            echo "<p id='mal'>Datos incorrectos, ingresa números entre 1 y 31</p>";
-        }
-        echo "<h3>Salida Anterior: </h3>";
-        if (isset($_SESSION["dia"]) && isset($_SESSION["quincena"])) {
+<p><strong>Contraseña (para pruebas):</strong> <?= $codigoRan ?></p>
 
-            salida();
-        } else {
-            echo "Aún no hay sessiones almacenadas</p>";
-        }
-    }
-    function quincena($dia)
-    {
-        return ($dia <= 15) ? "Primera quincena" : "Segunda Quincena";
-    }
-    session_destroy();c
+<form method="POST">
+    <label>Ingresa la combinación:</label>
+    <input type="password" name="combinacion" required>
+    <br><br>
+    <button type="submit">Adivinar</button>
+</form>
 
-    ?>
+<?= $mensaje ?>
+
+<hr>
+
+<h3>🔹 Ejecución actual</h3>
+<p>Intentos actuales: <?= $contador ?></p>
+
+<?php if (!empty($historialActual)): ?>
+    <ul>
+        <?php foreach ($historialActual as $intento): ?>
+            <li><?= htmlspecialchars($intento) ?></li>
+        <?php endforeach; ?>
+    </ul>
+<?php else: ?>
+    <p>Aún no hay intentos</p>
+<?php endif; ?>
+
+<hr>
+
+<h3>📌 Ejecuciones anteriores</h3>
+
+<?php if (!empty($historialAnterior)): ?>
+    <?php foreach ($historialAnterior as $indice => $bloque): ?>
+        <p><strong>Intento <?= $indice + 1 ?>:</strong></p>
+        <ul>
+            <?php foreach ($bloque["intentos"] as $i): ?>
+                <li><?= htmlspecialchars($i) ?></li>
+            <?php endforeach; ?>
+        </ul>
+        <p><strong>Resultado:</strong> <?= $bloque["resultado"] ?></p>
+        <p><strong>Contraseña correcta:</strong> <?= $bloque["codigo"] ?></p>
+        <hr>
+    <?php endforeach; ?>
+<?php else: ?>
+    <p>No hay ejecuciones anteriores</p>
+<?php endif; ?>
+
 </body>
-
 </html>
