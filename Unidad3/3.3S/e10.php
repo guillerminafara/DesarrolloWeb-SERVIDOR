@@ -1,6 +1,8 @@
 <?php
 session_start();
-$mailAnterior= $_SESSION["mail"];
+$mail1Anterior= $_SESSION["mail"];
+$mail2Anterior= $_SESSION["mail"];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
