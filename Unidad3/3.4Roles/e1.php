@@ -1,21 +1,53 @@
 <?php
 session_start();
-$rol = $_SESSION["rol"];
-switch ($rol) {
-    case "Sindicalista":
-        $location="Location:salidaSindicalista.php";
-        break;
-    case "Gerente":
-        $location="Location:salidaGerente.php";
+$rolSession = $_SESSION["rol"] ?? null;
+$nombreSession = $_SESSION["nombre"] ?? null;
+$trabajadoresSession = $_SESSION["trabajadores"] ?? [];
+$trabajadores = [
+    "Pepito" => 1000,
+    "Paquito" => 1200,
+    "Beto" => 1400,
+    "Cachito" => 2000,
+    "Manolito" => 600,
+];
 
-        break;
-    case "Responsble de Nóminas":
-         $location="Location:salidaResponsable.php";
-        break;
-    default:
-        break;
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (isset($_POST["nombre"]) && isset($_POST["roles"])) {
+        $nombre = $_POST["nombre"];
+        $rol = $_POST["roles"];
+        $_SESSION["trabajadores"] = $trabajadores;
+        $_SESSION["nombre"] = $nombre;
+        $_SESSION["rol"] = $rol;
+
+        $location = "";
+        switch ($rolSession) {
+            case "Sindicalista":
+                $location = "Location:salidaSindicalista.php";
+                break;
+            case "Gerente":
+                // $location = "Location: salidaGerente.php";
+                header("Location: salidaGerente.php");
+                exit;
+            case "Responsble de Nóminas":
+                $location = "Location:salidaResponsable.php";
+                break;
+            default:
+                header("Location: e1.php");
+                break;
+        }
+        header($location);
+        exit;
+    } else {
+        echo "salida Erronea en e1";
+    }
+} else {
+    echo "salida Erronea en e1 2";
 }
-?><!DOCTYPE html>
+
+
+?>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -25,15 +57,16 @@ switch ($rol) {
 </head>
 
 <body>
-    <form method="post">
-        <label>email:<input type="text" placeholder="ejemplo@mail.com"></label><br>
-        <label>constraseña:<input type="text"></label><br>
-        <label ><input type="radio"name="roles" value="Sindicalista">Sindicalista</label>
-        <label ><input type="radio"name="roles" value="Responsable">Responsable de Nóminas</label>
-        <label ><input type="radio"name="roles" value="Gerente">Gerente</label>
+    <h2> Formulario Roles y Permisos - Guillermina Fara</h2>
+    <form method="POST">
+        <label>nombre: <input type="text" name="nombre" placeholder="ejemplo guillermina"></label><br><br>
+        <h3>Perfil:</h3>
+        <label><input type="radio" name="roles" value="Sindicalista">Sindicalista</label><br>
+        <label><input type="radio" name="roles" value="Responsable de Nóminas">Responsable de Nóminas</label><br>
+        <label><input type="radio" name="roles" value="Gerente">Gerente</label><br><br>
 
 
-        <button>Iniciar Sesión</button><br>
+        <button type="submit">Iniciar Sesión</button><br>
     </form>
 </body>
 
