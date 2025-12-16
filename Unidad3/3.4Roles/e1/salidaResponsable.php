@@ -23,14 +23,12 @@ if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "Gerente") {
 </head>
 
 <body>
-    <h2>Salida del Gerente - Guillermina</h2>
+    <h2>Salida del Responsable - Guillermina</h2>
     <?php echo "Bienvenido: $nombreSession - $rolesSession ";
     leerAAsociativos($trabajadoresSession);
-    $media = calcularMedia($trabajadoresSession);
     $minimo = calculaSalarioMinimo($trabajadoresSession);
     $maximo = calculaSalarioMaximo($trabajadoresSession);
 
-    echo "<p>El salario medio: $media €</p>";
     echo "<p>El salario mínimo: $minimo €</p>";
     echo "<p>El salario máximo $maximo €</p>";
 

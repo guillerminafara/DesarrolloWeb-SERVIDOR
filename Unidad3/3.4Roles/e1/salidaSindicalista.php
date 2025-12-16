@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+include "calculos.php";
 if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "Sindicalista") {
     header("Location: e1.php");
     exit;
@@ -21,8 +21,12 @@ $trabajadoresSession = $_SESSION["trabajadores"];
 
 <body>
     <h2>SALIDA SINDICALISTA- Guillermina </h2>
-    <?php echo "Bienvenido: $nombreSession - $rolesSession "; ?>
+    <?php echo "Bienvenido: $nombreSession - $rolesSession ";
+    leerAAsociativos($trabajadoresSession);
+    $media = calcularMedia($trabajadoresSession);
+    echo "<p>El salario medio: $media €</p>";
 
+    ?>
 </body>
 
 </html>
