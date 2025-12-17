@@ -1,8 +1,8 @@
 <?php
 session_start();
-$rolSession = $_SESSION["rol"] ?? null;
-$nombreSession = $_SESSION["nombre"] ?? null;
-$trabajadoresSession = $_SESSION["trabajadores"] ?? [];
+// $rolSession = $_SESSION["rol"] ?? null;
+// $nombreSession = $_SESSION["nombre"] ?? null;
+// $trabajadoresSession = $_SESSION["trabajadores"] ?? [];
 $trabajadores = [
     "Pepito" => 1000,
     "Paquito" => 1200,
@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION["trabajadores"] = $trabajadores;
         $_SESSION["nombre"] = $nombre;
         $_SESSION["rol"] = $rol;
-
+        $rolSession = $_SESSION["rol"];
         $location = "";
         switch ($rolSession) {
             case "Sindicalista":
@@ -27,10 +27,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 break;
             case "Gerente":
                 // $location = "Location: salidaGerente.php";
-                header("Location: salidaGerente.php");
-                exit;
-            case "Responsble de Nóminas":
-                $location = "Location:salidaResponsable.php";
+                // header("Location: salidaGerente.php");
+                // exit;
+            case "Responsable de Nóminas":
+                $location = "Location: salidaResponsable.php";
                 break;
             default:
                 header("Location: e1.php");

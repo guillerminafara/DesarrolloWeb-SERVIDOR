@@ -33,7 +33,9 @@ if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "Gerente") {
     echo "<p>El salario máximo $maximo €</p>";
 
     ?>
-
+    <form action="CerrarSesion.php" method="post">
+        <button>Cerrar Sesión</button>
+    </form>
 </body>
 
 </html>

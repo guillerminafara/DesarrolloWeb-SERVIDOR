@@ -27,6 +27,9 @@ $trabajadoresSession = $_SESSION["trabajadores"];
     echo "<p>El salario medio: $media €</p>";
 
     ?>
+    <form action="CerrarSesion.php" method="post">
+        <button>Cerrar Sesión</button>
+    </form>
 </body>
 
 </html>

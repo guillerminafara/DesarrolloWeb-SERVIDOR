@@ -10,7 +10,8 @@ if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "Gerente") {
     $trabajadoresSession = $_SESSION["trabajadores"];
     // $trabajadoresSession;
 }
-function cerrarSesion(){
+function cerrarSesion()
+{
     session_unset();
     session_destroy();
     header("Location:e1.php");
@@ -40,7 +41,9 @@ function cerrarSesion(){
     echo "<p>El salario máximo $maximo €</p>";
 
     ?>
-    <button>Cerrar Sesión</button>
+    <form action="CerrarSesion.php" method="post">
+        <button>Cerrar Sesión</button>
+    </form>
 </body>
 
 </html>
