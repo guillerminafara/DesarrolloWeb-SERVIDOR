@@ -23,11 +23,13 @@ $trabajadoresSession = $_SESSION["trabajadores"];
     <h2>SALIDA SINDICALISTA- Guillermina </h2>
     <?php echo "Bienvenido: $nombreSession - $rolesSession ";
     leerAAsociativos($trabajadoresSession);
+    echo "<h3> A lo que tiene acceso: </h3>";
+
     $media = calcularMedia($trabajadoresSession);
     echo "<p>El salario medio: $media €</p>";
 
     ?>
-    <form action="CerrarSesion.php" method="post">
+    <form action="cerrarSesion.php" method="post">
         <button>Cerrar Sesión</button>
     </form>
 </body>

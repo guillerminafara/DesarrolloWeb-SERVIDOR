@@ -26,9 +26,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $location = "Location:salidaSindicalista.php";
                 break;
             case "Gerente":
-                // $location = "Location: salidaGerente.php";
+                $location = "Location: salidaGerente.php";
                 // header("Location: salidaGerente.php");
                 // exit;
+                break;
             case "Responsable de Nóminas":
                 $location = "Location: salidaResponsable.php";
                 break;
@@ -41,10 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         echo "salida Erronea en e1";
     }
-} else {
-    echo "salida Erronea en e1 2";
 }
-
 
 ?>
 <!DOCTYPE html>

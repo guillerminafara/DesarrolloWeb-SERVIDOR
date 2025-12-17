@@ -36,12 +36,13 @@ function cerrarSesion()
     $minimo = calculaSalarioMinimo($trabajadoresSession);
     $maximo = calculaSalarioMaximo($trabajadoresSession);
 
+    echo "<h3> A lo que tiene acceso: </h3>";
     echo "<p>El salario medio: $media €</p>";
     echo "<p>El salario mínimo: $minimo €</p>";
     echo "<p>El salario máximo $maximo €</p>";
 
     ?>
-    <form action="CerrarSesion.php" method="post">
+    <form action="cerrarSesion.php" method="post">
         <button>Cerrar Sesión</button>
     </form>
 </body>
