@@ -44,6 +44,7 @@ function cerrarSesion()
     ?>
     <form action="cerrarSesion.php" method="post">
         <button>Cerrar Sesión</button>
+        <input type="hidden" name="token" value="<?=$_SESSION["token"]?>">
     </form>
 </body>
 

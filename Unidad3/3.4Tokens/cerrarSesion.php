@@ -12,8 +12,15 @@ if (isset($_POST["token"]) && hash_equals($_SESSION["token"], $_POST["token"])) 
 
         setcookie(session_name(), '', time() - 3600, $CookieInfo['path'], $CookieInfo['domain'], $CookieInfo['secure']);
     }
+    unset($_SESSION["token"]);
+    // session_unset();
     session_destroy();
 
     header("Location:e1.php");
     exit;
+} else {
+    echo "<h3>Error en validación de Sesion, Redirigiendo</h3>";
+    sleep(3);
+    header("Location:e1.php");
+
 }

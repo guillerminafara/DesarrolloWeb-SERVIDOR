@@ -3,11 +3,10 @@ session_start();
 if (!isset($_SESSION["token"])) {
     $_SESSION["token"] = bin2hex(openssl_random_pseudo_bytes(24));
 }
-// <form action="process.php" name="token" value<?php echo >>
-if (!isset($_POST["cambiar"])) {
-    $_SESSION["token"] = bin2hex(openssl_random_pseudo_bytes(24));
-    echo "<p>Token de sesión regenerado. Prueba a enviar el formulario ahora</p>";
-}
+// if (isset($_POST["cambiar"])) {
+//     $_SESSION["token"] = bin2hex(openssl_random_pseudo_bytes(24));
+//     echo "<p>Token de sesión regenerado. Prueba a enviar el formulario ahora</p>";
+// }
 $trabajadores = [
     "Pepito" => 1000,
     "Paquito" => 1200,
@@ -16,11 +15,10 @@ $trabajadores = [
     "Manolito" => 600,
 ];
 
-
 if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST["cambiar"])) {
     if (!isset($_POST["token"])) {
         echo "<p> No hay tokens diponible</p>";
-    } else if (hash_equals($_SESSION["token"], $_POST["token"] === "false")) {
+    } else if (!hash_equals($_SESSION["token"], $_POST["token"])) {
         echo "<p> Token no coincide </p>";
     } else {
         if (isset($_POST["nombre"]) && isset($_POST["roles"])) {
@@ -39,8 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST["cambiar"])) {
                         break;
                     case "Gerente":
                         $location = "Location: salidaGerente.php";
-                        // header("Location: salidaGerente.php");
-                        // exit;
                         break;
                     case "Responsable de Nóminas":
                         $location = "Location: salidaResponsable.php";
@@ -49,11 +45,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST["cambiar"])) {
                         header("Location: e1.php");
                         break;
                 }
-                // unset($_SESSION["token"]);
                 header($location);
                 exit;
-            }else{
-                echo"<p>El nombre solo puede contener letras</p>";
+            } else {
+                echo "<p>El nombre solo puede contener letras</p>";
             }
         }
     }
@@ -72,16 +67,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST["cambiar"])) {
 <body>
     <h2> Formulario Roles y Permisos - Guillermina Fara</h2>
     <form method="POST">
+        <input type="hidden" name="token" value="<?php echo $_SESSION["token"]; ?>">
         <label>nombre: <input type="text" name="nombre" placeholder="ejemplo guillermina"></label><br><br>
         <h3>Perfil:</h3>
-        <label><input type="radio" name="roles" value="Sindicalista">Sindicalista</label><br>
+        <label><input type="radio" name="roles" value="Sindicalista" required>Sindicalista</label><br>
         <label><input type="radio" name="roles" value="Responsable de Nóminas">Responsable de Nóminas</label><br>
         <label><input type="radio" name="roles" value="Gerente">Gerente</label><br><br>
 
+        <button type="submit">Iniciar Sesión</button>
+        <!-- <button name="cambiar"> Cambiar la SID</button> -->
 
-        <!-- <button type="submit">Iniciar Sesión</button><br> -->
     </form>
-    <a href="cerrarSesion.php?token=<?php echo $_SESSION["token"];?>">Cerrar Sesión</a>
+
 </body>
 
 </html>

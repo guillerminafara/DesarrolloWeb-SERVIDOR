@@ -30,7 +30,9 @@ $trabajadoresSession = $_SESSION["trabajadores"];
     echo "<p>El salario medio: $media €</p>";
 
     ?>
-    <form action="cerrarSesion.php" method="post">
+    <!-- <a href="cerrarSesion.php"> Cerrar Sesión /body></a> -->
+    <form action="cerrarSesion.php" method="POST">
+        <input type="hidden" name="token" value="<?=$_SESSION["token"]?>">
         <button>Cerrar Sesión</button>
     </form>
 </body>
