@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION["nombre"]) || isset($_SESSION["apellido"])) {
+if (isset($_SESSION["cargo"]) || $_SESSION["cargo"] === "Estudiante") {
     $mayor_de_edad_session = null;
     $nombreSession = $_SESSION["nombre"] ?? null;
     $apellidoSession = $_SESSION["apellido"] ?? null;
@@ -52,7 +52,9 @@ if (isset($_SESSION["nombre"]) || isset($_SESSION["apellido"])) {
 <body>
 
     <?php
-    echo "<h2>Bienvenido- $nombreSession</h2>";
+    echo "<h2>Salida Estudiante</h2>";
+    echo "<h3>Bienvenido - " . ucfirst($nombreSession) . " - " . ucfirst($apellidoSession) . " - "  . ucfirst($grupoSession) . "</h3>";
+     echo "<p><strong>Asignatura:</strong>" . ucfirst($asignaturaSession) . "</p>";
     echo "<br>";
     echo "<table>";
     echo "<tr>";
@@ -65,17 +67,18 @@ if (isset($_SESSION["nombre"]) || isset($_SESSION["apellido"])) {
 
     echo "<tr>";
     echo " <td>$grupoSession</td>";
-    if ($mayor_de_edad_session) {
+   if ($mayor_de_edad_session === "true") {
         echo "<td> X </td>";
-        echo "<td></td>";
-    } else {
+        echo "<td></td>";    
+    } else if ($mayor_de_edad_session === "false") {
         echo "<td></td>";
         echo "<td> X </td>";
     }
-    if ($cargoSession) {
+  
+    if ($cargoSession === "true") {
         echo "<td> X </td>";
         echo "<td></td>";
-    } else {
+    } else if ($cargoSession === "false") {
         echo "<td></td>";
         echo "<td> X </td>";
     }
@@ -83,6 +86,10 @@ if (isset($_SESSION["nombre"]) || isset($_SESSION["apellido"])) {
     echo "</tr>";
     echo " </table>";
     ?>
+      <br>
+      <form action="cerrarSesion.php" method="post">
+        <button>Cerrar Sesión</button>
+    </form>
 </body>
 
 </html>

@@ -30,7 +30,7 @@ function cerrarSesion()
 
 <body>
     <h2>Salida del Gerente - Guillermina</h2>
-    <?php echo "Bienvenido: $nombreSession - $rolesSession ";
+    <?php echo "Bienvenido:". ucfirst($nombreSession)." - $rolesSession ";
     leerAAsociativos($trabajadoresSession);
     $media = calcularMedia($trabajadoresSession);
     $minimo = calculaSalarioMinimo($trabajadoresSession);

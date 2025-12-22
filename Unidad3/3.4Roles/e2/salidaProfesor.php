@@ -1,14 +1,14 @@
 <?php
 session_start();
-if (isset($_SESSION["nombre"]) || isset($_SESSION["apellido"])) {
+if (isset($_SESSION["cargo"]) || $_SESSION["cargo"] === "Profesor") {
     $mayor_de_edad_session = null;
     $nombreSession = $_SESSION["nombre"] ?? null;
     $apellidoSession = $_SESSION["apellido"] ?? null;
     $grupoSession = $_SESSION["grupo"] ?? null;
     $asignaturaSession = $_SESSION["asignatura"] ?? null;
-    $mayor_de_edad_session = $_SESSION["mayor_de_edad"] ?? null;
-    $cargoSession = $_SESSION["cargo"] ?? null;
-    // echo "$nombreSession, $apellidoSession, $grupoSession, $asignaturaSession, $mayor_de_edad_session, $grupoSession";
+    $mayor_de_edad_session = false;//$_SESSION["mayor_de_edad"] ?? null;
+    $cargoSession =true;//$_SESSION["cargo"] ?? null;
+    echo "$nombreSession, $apellidoSession, $grupoSession, $asignaturaSession, $mayor_de_edad_session, $grupoSession";
 } else {
     header("Location: e2.php");
     exit;
@@ -52,7 +52,10 @@ if (isset($_SESSION["nombre"]) || isset($_SESSION["apellido"])) {
 <body>
 
     <?php
-    echo "<h2>Bienvenido- $nombreSession</h2>";
+    echo "<h2>Salida Profesor</h2>";
+    echo "<h3>Bienvenido - " . ucfirst($nombreSession) . " - " . ucfirst($apellidoSession) . " - "  . ucfirst($grupoSession) . "</h3>";
+
+    echo "<p><strong>Asignatura:</strong>" . ucfirst($asignaturaSession) . "</p>";
     echo "<br>";
     echo "<table>";
     echo "<tr>";
@@ -65,24 +68,29 @@ if (isset($_SESSION["nombre"]) || isset($_SESSION["apellido"])) {
 
     echo "<tr>";
     echo " <td>$grupoSession</td>";
-    if ($mayor_de_edad_session) {
+   if ($mayor_de_edad_session === "true") {
         echo "<td> X </td>";
-        echo "<td></td>";
-    } else {
-        echo "<td></td>";
-        echo "<td> X </td>";
-    }
-    if ($cargoSession) {
-        echo "<td> X </td>";
-        echo "<td></td>";
-    } else {
+        echo "<td></td>";    
+    } else if ($mayor_de_edad_session === "false") {
         echo "<td></td>";
         echo "<td> X </td>";
     }
-
+  
+    if ($cargoSession === "true") {
+        echo "<td> X </td>";
+        echo "<td></td>";
+    } else if ($cargoSession === "false") {
+        echo "<td></td>";
+        echo "<td> X </td>";
+    }
     echo "</tr>";
     echo " </table>";
+
     ?>
+    <br>
+    <form action="cerrarSesion.php" method="post">
+        <button>Cerrar Sesión</button>
+    </form>
 </body>
 
 </html>

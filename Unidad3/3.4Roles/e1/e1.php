@@ -14,31 +14,35 @@ $trabajadores = [
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST["nombre"]) && isset($_POST["roles"])) {
+
         $nombre = $_POST["nombre"];
         $rol = $_POST["roles"];
-        $_SESSION["trabajadores"] = $trabajadores;
-        $_SESSION["nombre"] = $nombre;
-        $_SESSION["rol"] = $rol;
-        $rolSession = $_SESSION["rol"];
-        $location = "";
-        switch ($rolSession) {
-            case "Sindicalista":
-                $location = "Location:salidaSindicalista.php";
-                break;
-            case "Gerente":
-                $location = "Location: salidaGerente.php";
-                // header("Location: salidaGerente.php");
-                // exit;
-                break;
-            case "Responsable de Nóminas":
-                $location = "Location: salidaResponsable.php";
-                break;
-            default:
-                header("Location: e1.php");
-                break;
+
+        if (ctype_alpha($nombre)) {
+            $_SESSION["trabajadores"] = $trabajadores;
+            $_SESSION["nombre"] = $nombre;
+            $_SESSION["rol"] = $rol;
+            $rolSession = $_SESSION["rol"];
+            $location = "";
+            switch ($rolSession) {
+                case "Sindicalista":
+                    $location = "Location:salidaSindicalista.php";
+                    break;
+                case "Gerente":
+                    $location = "Location: salidaGerente.php";
+                    // header("Location: salidaGerente.php");
+                    // exit;
+                    break;
+                case "Responsable de Nóminas":
+                    $location = "Location: salidaResponsable.php";
+                    break;
+                default:
+                    header("Location: e1.php");
+                    break;
+            }
+            header($location);
+            exit;
         }
-        header($location);
-        exit;
     } else {
         echo "salida Erronea en e1";
     }

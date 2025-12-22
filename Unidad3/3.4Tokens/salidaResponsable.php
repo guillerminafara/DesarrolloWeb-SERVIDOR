@@ -8,9 +8,10 @@ if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "Responsable de Nóminas") 
     $rolesSession = $_SESSION["rol"];
     $nombreSession = $_SESSION["nombre"];
     $trabajadoresSession = $_SESSION["trabajadores"];
-    // $trabajadoresSession;
 }
 
+if (isset($_POST["cerrarSesion"])) {
+}
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +25,7 @@ if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "Responsable de Nóminas") 
 
 <body>
     <h2>Salida del Responsable - Guillermina</h2>
-    <?php echo "Bienvenido:". ucfirst($nombreSession)." - $rolesSession ";
+    <?php echo "Bienvenido:" . ucfirst($nombreSession) . " - $rolesSession ";
 
     leerAAsociativos($trabajadoresSession);
     $minimo = calculaSalarioMinimo($trabajadoresSession);
@@ -36,8 +37,9 @@ if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "Responsable de Nóminas") 
     echo "<p>El salario máximo $maximo €</p>";
 
     ?>
-    <form action="cerrarSesion.php" method="post">
-        <button>Cerrar Sesión</button>
+    <form action="cerrarSesion.php" method="POST">
+        <input type="hidden" name="token" value="<?php echo $_SESSION["token"]; ?>">
+        <button name="cerrarSesion">Cerrar Sesión</button>
     </form>
 </body>
 

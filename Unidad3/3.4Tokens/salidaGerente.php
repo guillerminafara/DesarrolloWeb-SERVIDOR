@@ -1,16 +1,22 @@
 <?php
 session_start();
 include "calculos.php";
-if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "Responsable de Nóminas") {
+if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "Gerente") {
     header("Location: e1.php");
     exit;
 } else {
     $rolesSession = $_SESSION["rol"];
     $nombreSession = $_SESSION["nombre"];
     $trabajadoresSession = $_SESSION["trabajadores"];
-    // $trabajadoresSession;
+   
 }
-
+function cerrarSesion()
+{
+    session_unset();
+    session_destroy();
+    header("Location:e1.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -23,15 +29,15 @@ if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "Responsable de Nóminas") 
 </head>
 
 <body>
-    <h2>Salida del Responsable - Guillermina</h2>
+    <h2>Salida del Gerente - Guillermina</h2>
     <?php echo "Bienvenido:". ucfirst($nombreSession)." - $rolesSession ";
-
     leerAAsociativos($trabajadoresSession);
+    $media = calcularMedia($trabajadoresSession);
     $minimo = calculaSalarioMinimo($trabajadoresSession);
     $maximo = calculaSalarioMaximo($trabajadoresSession);
 
     echo "<h3> A lo que tiene acceso: </h3>";
-
+    echo "<p>El salario medio: $media €</p>";
     echo "<p>El salario mínimo: $minimo €</p>";
     echo "<p>El salario máximo $maximo €</p>";
 
