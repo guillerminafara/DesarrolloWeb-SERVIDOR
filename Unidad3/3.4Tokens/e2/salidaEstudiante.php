@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION["cargo"]) && $_SESSION["cargo"] === "Estudiante") {
+if (isset($_SESSION["grupo"]) || $_SESSION["grupo"] === "Estudiante") {
     $mayor_de_edad_session = null;
     $nombreSession = $_SESSION["nombre"] ?? null;
     $apellidoSession = $_SESSION["apellido"] ?? null;

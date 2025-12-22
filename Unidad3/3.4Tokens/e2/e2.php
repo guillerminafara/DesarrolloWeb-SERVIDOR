@@ -8,7 +8,8 @@ if (!isset($_SESSION["token"])) {
 //funcion para cambiar el token actual por otro
 if (isset($_POST["cambiar"])) {
     $_SESSION["token"] = bin2hex(openssl_random_pseudo_bytes(24));
-    // echo "<p>Token de sesión regenerado. Prueba a enviar el formulario ahora</p>";
+    echo "<p>Token de sesión regenerado. Prueba a enviar el formulario ahora</p>";
+
 }
 //
 if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST["cambiar"])) {
@@ -17,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST["cambiar"])) {
         // echo "<p>No hay token activos</p>";
     } else if (!hash_equals($_SESSION["token"], $_POST["token"])) {
         //salida para tokens que no coinciden 
-        // echo "<p id='mal'>No hay token activos</p>";
+        echo "<p id='mal'>No hay token activos</p>";
     } else {
         //salida para tokens que si coinciden y que no presenta variables vacias
         if (isset($_POST["nombre"]) && isset($_POST["apellido"]) && isset($_POST["asignatura"]) && isset($_POST["mayor_de_edad"])) {
@@ -27,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST["cambiar"])) {
             $grupo = $_POST["grupo"];
             $mayor_de_edad = $_POST["mayor_de_edad"];
             $cargo = $_POST["cargo"] ?? null;
-            if (ctype_alpha($nombre) && ctype_alpha($apellido) && ctype_alpha($asignatura) && isset($cargo) && isset($mayor_de_edad)) {
+            if (ctype_alpha($nombre) && ctype_alpha($apellido) && ctype_alpha(str_replace(' ', '', $asignatura)) && isset($cargo) && isset($mayor_de_edad)) {
                 $_SESSION["nombre"] = $nombre;
                 $_SESSION["apellido"] = $apellido;
                 $_SESSION["asignatura"] = $asignatura;
@@ -49,15 +50,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST["cambiar"])) {
                         break;
                     default:
                         $location = "Location: e2.php";
-                        // echo "Encontrando el error";
-
                         break;
                 }
                 // sleep(2);
                 header($location);
                 exit;
             } else {
-                // echo "<p>Nombre y apellido deben ser solo letras</p>";
+                echo "<p>Nombre y apellido deben ser solo letras</p>";
             }
         }
     }
@@ -79,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST["cambiar"])) {
         <label>Nombre: <input type="text" name="nombre" required></label><br><br>
         <label for="">Apellido: <input type="text" name="apellido" required></label><br><br>
         <label for="">Asignatura: <input type="text" name="asignatura" required></label><br><br>
-        <label for="">Grupo: <select type="combo" name="grupo" required><br><br>
+        <label for="">Grupo: <select id="grupo" name="grupo" required><br><br>
                 <option value="Estudiante">Estudiante</option>
                 <option value="Delegado">Delegado</option>
                 <option value="Profesor">Profesor</option>
@@ -96,9 +95,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST["cambiar"])) {
 
         <label for="cargo"><input id="cargo" type="radio" name="cargo" value=true required>Sí</label><br><br>
         <label for="cargo"><input id="cargo" type="radio" name="cargo" value=false required>No</label><br><br>
-        <input type="hidden" name="token" value="<?= $_SESSION["token"]?>">
+        <input type="hidden" name="token" value="<?= $_SESSION["token"] ?>">
         <button type="submit">Cargar tabla</button><br> <br>
+    </form>
+    <form method="POST">
         <button type="submit" name="cambiar"> Cambiar la SID</button>
+
     </form>
 </body>
 
