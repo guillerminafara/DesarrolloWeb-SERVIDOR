@@ -3,10 +3,10 @@ session_start();
 if (!isset($_SESSION["token"])) {
     $_SESSION["token"] = bin2hex(openssl_random_pseudo_bytes(24));
 }
-// if (isset($_POST["cambiar"])) {
-//     $_SESSION["token"] = bin2hex(openssl_random_pseudo_bytes(24));
-//     echo "<p>Token de sesión regenerado. Prueba a enviar el formulario ahora</p>";
-// }
+if (isset($_POST["cambiar"])) {
+    $_SESSION["token"] = bin2hex(openssl_random_pseudo_bytes(24));
+    echo "<p>Token de sesión regenerado. Prueba a enviar el formulario ahora</p>";
+}
 $trabajadores = [
     "Pepito" => 1000,
     "Paquito" => 1200,
@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST["cambiar"])) {
         <label><input type="radio" name="roles" value="Gerente">Gerente</label><br><br>
 
         <button type="submit">Iniciar Sesión</button>
-        <!-- <button name="cambiar"> Cambiar la SID</button> -->
+        <button name="cambiar"> Cambiar la SID</button>
 
     </form>
 

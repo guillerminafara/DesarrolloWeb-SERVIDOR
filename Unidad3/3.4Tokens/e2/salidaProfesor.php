@@ -1,7 +1,6 @@
 <?php
 session_start();
-$bandera= hash_equals($_SESSION["token"], $_POST["token"]);
-if (isset($_SESSION["cargo"]) || $_SESSION["cargo"] === "Profesor" && $bandera) {
+if (isset($_SESSION["cargo"]) || $_SESSION["cargo"] === "Profesor") {
     $mayor_de_edad_session = null;
     $nombreSession = $_SESSION["nombre"] ?? null;
     $apellidoSession = $_SESSION["apellido"] ?? null;

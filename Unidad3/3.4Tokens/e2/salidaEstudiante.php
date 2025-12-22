@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION["cargo"]) || $_SESSION["cargo"] === "Estudiante") {
+if (isset($_SESSION["cargo"]) && $_SESSION["cargo"] === "Estudiante") {
     $mayor_de_edad_session = null;
     $nombreSession = $_SESSION["nombre"] ?? null;
     $apellidoSession = $_SESSION["apellido"] ?? null;
@@ -10,6 +10,7 @@ if (isset($_SESSION["cargo"]) || $_SESSION["cargo"] === "Estudiante") {
     $cargoSession = $_SESSION["cargo"] ?? null;
     // echo "$nombreSession, $apellidoSession, $grupoSession, $asignaturaSession, $mayor_de_edad_session, $grupoSession";
 } else {
+
     header("Location: e2.php");
     exit;
 }
@@ -89,6 +90,7 @@ if (isset($_SESSION["cargo"]) || $_SESSION["cargo"] === "Estudiante") {
       <br>
       <form action="cerrarSesion.php" method="post">
         <button>Cerrar Sesión</button>
+          <input type="hidden" name="token" value="<?=$_SESSION["token"]?>">
     </form>
 </body>
 
