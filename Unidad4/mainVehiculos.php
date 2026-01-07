@@ -3,8 +3,8 @@
  * author Silvia Vilar
  * Ej3UD8 - mainVehiculos.php
  */
-include "Bicicleta.php";
-include "Coche.php";
+include "./clases/Bicicleta.php";
+include "./clases/Coche.php";
 
 $bicicleta = new Bicicleta();
 $coche = new Coche();
