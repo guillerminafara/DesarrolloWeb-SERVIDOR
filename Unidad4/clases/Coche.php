@@ -11,7 +11,11 @@ class Coche extends Vehiculo{
     function quemaRueda(){
 
     }
+  function vrKMRecorridos()
+    {
+        parent::verKMRecorridos();
 
+    }
 }
 
 ?>
