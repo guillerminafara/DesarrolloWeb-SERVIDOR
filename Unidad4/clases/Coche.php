@@ -8,10 +8,10 @@ class Coche extends Vehiculo{
     function llenarDeposito(){
 
     }
-    function quemarRueda(){
+    function quemaRueda(){
 
     }
-    
+
 }
 
 ?>
