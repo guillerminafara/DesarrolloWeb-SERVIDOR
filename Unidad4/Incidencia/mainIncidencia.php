@@ -3,7 +3,7 @@
  * @author Silvia Vilar
  * Ej1UD8 - mainIncidencia.php
  */ 
-include "./clases/Incidencia.php";
+include "Incidencia.php";
 $inc1 = new Incidencia(105, "No tiene acceso a internet");
 $inc2 = new Incidencia(14, "No arranca");
 $inc3 = new Incidencia(5, "La pantalla se ve rosa");

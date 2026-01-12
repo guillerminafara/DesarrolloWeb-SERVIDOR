@@ -3,7 +3,7 @@
  * @author Silvia Vilar  
  * Ej2UD8 - mainMoviles.php
  */   
-include "./clases/Movil.php";
+include "Movil.php";
 
 $m1 = new Movil("678 11 22 33", "rata");
 $m2 = new Movil("644 74 44 69", "mono");

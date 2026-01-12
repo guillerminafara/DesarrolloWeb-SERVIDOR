@@ -3,14 +3,15 @@
  * author Silvia Vilar
  * Ej3UD8 - mainVehiculos.php
  */
-include "./clases/Bicicleta.php";
-include "./clases/Coche.php";
+include_once "Bicicleta.php";
+include_once "Coche.php";
+
 
 $bicicleta = new Bicicleta();
 $coche = new Coche();
 
  do{
-	echo "MENU PRINCIPAL<br>\n";
+	echo "\nMENU PRINCIPAL<br>\n";
 	echo "==============<br>\n";
 	echo "1. Avanza con la bicicleta<br>\n";
 	echo "2. Haz el caballito con la bicicleta<br>\n";
@@ -79,7 +80,7 @@ $coche = new Coche();
 
 		case '12': //añade un coche
 			$nombrecoche = readline("Introduce el nombre del coche: ");
-			$$nombrecoche = new COche();
+			$$nombrecoche = new Coche();
 			break;
 
 		case 'X':
@@ -91,6 +92,6 @@ $coche = new Coche();
 			break;
 	} 
 
-} while ($opcion!='X');
+} while (strtoupper($opcion)!='X');
 
 ?>
