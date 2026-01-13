@@ -1,6 +1,9 @@
 <?php
 
-/**@author Guillermina Fara */
+/**
+ * @author Guillermina Fara 
+ * 
+ */
 class Persona
 {
     public $nombre;
@@ -21,6 +24,7 @@ class Persona
         $this->sexo = "H";
         $this->peso = 0;
         $this->altura = 0;
+        $this->dni=
     }
     //el metodo devuelve un objeto persona porque lo estoy creando desde dentro del objeto, no desde fuera.
     public static function consNomEdSex(string $nombre, int $edad, string $sexo)
@@ -43,7 +47,7 @@ class Persona
         $persona->altura = $altura;
         return $persona;
     }
-    function comprobarSexo($sexo)
+    private function comprobarSexo($sexo)
     {
         return (strtoupper($sexo) === "M") ? $sexo : "H";
     }
@@ -67,21 +71,66 @@ class Persona
     {
         $this->sexo = $sexo;
     }
+    function calcularIMC()
+    {
+        $valor = $this->peso / fpow($this->altura, 2);
+        if ($valor < 20) {
+            return self::INFRAPESO;
+        } else if ($valor >= 20 && $valor <= 25) {
+            return self::PESO_IDEAL;
+
+        } else {
+            return self::SOBREPESO;
+        }
+    }
+
+    function strIMC()
+    {
+        $valor = self::calcularIMC();
+
+        if ($valor === self::INFRAPESO) {
+            return $this->nombre . " Se encuentra bajo peso";
+        } else if ($valor === self::PESO_IDEAL) {
+            return $this->nombre . " Se encuentra en su peso ideal";
+
+        } else {
+            return $this->nombre . " Se encuentra sobre peso";
+        }
+
+    }
     function mostrarIMC()
     {
-        $devolver = "";
-        $valor = $this->peso / fpow($this->altura, 2);
-        if ($valor === self::INFRAPESO) {
-            $this ->devolver = "IMC: ".self::INFRAPESO;
-        }else{
-
-        }
-        return "IMC: ";
+        print self::strIMC();// hacer print
     }
 
     function esMayorDeEdad()
     {
         $this->edad = abs($this->edad);
-        return $this->edad >= 18 && $this->edad < 100 ? "Es mayor de edad" : "No es mayor de edad";
+        return $this->edad >= 18 && $this->edad < 110 ? true : false;
     }
+
+    function toString()
+    {
+        return "La persona: $this->nombre, $this->sexo de $this->edad años, Con altura $this->altura y peso $this->peso kgs ";
+    }
+
+}
+trait DNI
+{
+    public function generarDNI()
+    {
+        $numeroAleatorio= rand(10000000,99999999);
+        $resto= $numeroAleatorio/23;
+        $letra=$this->generarLetraDNI($resto);
+        return "$numeroAleatorio $letra";
+    }
+    private function generarLetraDNI($idLetra)
+    {
+        $letras = [
+            'T','R','W','A','G','M','Y','F','P','D','X','B','N','J','Z','S','Q','V','H','L',
+            'C','K','E'
+        ];
+        return $letras[$idLetra];
+    }
+
 }
