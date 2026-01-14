@@ -6,15 +6,15 @@
 include "Persona.php";
 //Obtenermos los datos de la persona
 print "Introduce el nombre de la persona: ";
-$nombre=readline();
+$nombre="paquito";//readline();
 print "Introduce la edad de la persona: ";
-$edad=intval(readline());
+$edad=20;//intval(readline());
 print "Introduce el sexo de la persona (H o M): ";
-$sexo=readline();
+$sexo="h";//readline();
 print "Introduce el peso de la persona: ";
-$peso=floatval(readline());
+$peso=floatval(125);//floatval(readline());
 print "Introduce la altura de la persona: ";
-$altura=floatval(readline());
+$altura=floatval(1.70);//floatval(readline());
 //Creamos 3 personas usando cada uno de los constructores
 $p1 = Persona::consFull($nombre, $edad, $sexo, $peso, $altura);
 $p2 = Persona::consNomEdSex("Maria", 18, 'M');
@@ -35,11 +35,11 @@ $p1->esMayorDeEdad();
 $p2->esMayorDeEdad();
 $p3->esMayorDeEdad();
 //Imprimimos los datos de las personas
-print " PERSONA 1 ";
+print "\n PERSONA 1 ";
 print $p1;
-print " PERSONA 2 ";
+print "\n PERSONA 2 ";
 print $p2;
-print " PERSONA 3 ";
+print "\n PERSONA 3 ";
 print $p3;
-print " FIN DEL PROGRAMA ";
+print "\n FIN DEL PROGRAMA ";
 ?>
