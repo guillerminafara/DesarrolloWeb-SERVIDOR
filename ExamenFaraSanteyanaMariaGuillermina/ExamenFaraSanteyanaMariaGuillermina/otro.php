@@ -1,0 +1,144 @@
+<?php
+$errores = [];
+$directorioSubida = "fotos/";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+ 
+    $nombre = trim($_POST['nombre']);
+    $password = $_POST['password'];
+    $estudios = $_POST['estudios'] ?? '';
+    $nacionalidad = $_POST['nacionalidad'] ?? '';
+    $idiomas = isset($_POST['idiomas']) ? implode(", ", $_POST['idiomas']) : 'Ninguno';
+    $email = trim($_POST['email']);
+
+
+    if (empty($nombre)) $errores[] = "El nombre es obligatorio.";
+    if (strlen($password) < 6) $errores[] = "La contraseña debe tener al menos 6 caracteres.";
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errores[] = "El email no es válido.";
+
+    
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+        $nombreOriginal = $_FILES['foto']['name'];
+        $tamano = $_FILES['foto']['size'];
+        
+        // Uso de explode() para la extensión según el requerimiento
+        $partes = explode('.', $nombreOriginal);
+        $extension = strtolower(end($partes));
+        $extensionesValidas = ['jpg', 'gif', 'png'];
+
+        if (!in_array($extension, $extensionesValidas)) {
+            $errores[] = "Extensión no válida.";
+        } elseif ($tamano > 51200) { // 50 KB [12]
+            $errores[] = "La foto supera los 50 KB.";
+        }
+
+        if (empty($errores)) {
+            if (!is_dir($directorioSubida)) { //[13]
+                $errores[] = "El directorio de destino no existe.";
+            } else {
+                // Generar nombre único [11, 13]
+                $nombreUnico = time() . "_" . uniqid() . "." . $extension;
+                move_uploaded_file($_FILES['foto']['tmp_name'], $directorioSubida . $nombreUnico);
+            }
+        }
+    } else {
+        $errores[] = "Error al subir la foto.";
+    }
+
+    // REDIRECCIÓN CON CABECERA PASANDO DATOS [2, 4, 14]
+    if (empty($errores)) {
+        // Construimos la URL con los datos codificados
+        $query = "?nombre=" . urlencode($nombre) . 
+                 "&email=" . urlencode($email) . 
+                 "&estudios=" . urlencode($estudios) . 
+                 "&nacionalidad=" . urlencode($nacionalidad) . 
+                 "&idiomas=" . urlencode($idiomas);
+        
+        // La cabecera Location debe ir antes de cualquier salida HTML [3]
+        header("Location: exito.php" . $query);
+        exit;
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario</title>
+</head>
+<body>
+    <h1>Registro</h1>
+    <?php if ($errores): ?>
+        <ul style="color: red;">
+            <?php foreach ($errores as $error) echo "<li>$error</li>"; ?>
+        </ul>
+    <?php endif; ?>
+
+    <form action="index.php" method="POST" enctype="multipart/form-data">
+        <fieldset>
+            <legend>Datos</legend>
+            Nombre: <input type="text" name="nombre" value="<?php echo htmlspecialchars($nombre ?? ''); ?>"><br><br>
+            Password: <input type="password" name="password"><br><br>
+            Email: <input type="text" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>"><br><br>
+            Estudios: 
+            <select name="estudios">
+                <option>Sin estudios</option>
+                <option>ESO</option>
+                <option>Bachillerato</option>
+                <option>FP</option>
+                <option>Universitarios</option>
+            </select><br><br>
+            Nacionalidad: 
+            <input type="radio" name="nacionalidad" value="Española" checked> Española
+            <input type="radio" name="nacionalidad" value="Otra"> Otra<br><br>
+            Idiomas:<br>
+            <input type="checkbox" name="idiomas[]" value="Español"> Español
+            <input type="checkbox" name="idiomas[]" value="Inglés"> Inglés
+            <input type="checkbox" name="idiomas[]" value="Francés"> Francés<br><br>
+            Foto: <input type="file" name="foto"><br><br>
+            
+            <input type="reset" value="Limpiar">
+            <input type="submit" value="Validar">
+            <input type="submit" value="Enviar">
+        </fieldset>
+    </form>
+</body>
+</html>
+2. Fichero exito.php (Recepción de datos)
+En esta página, los datos enviados en la cabecera se recuperan a través del array global $_GET.
+<?php
+// Recogemos los datos pasados por la URL [15, 16]
+$nombre = $_GET['nombre'] ?? 'Desconocido';
+$email = $_GET['email'] ?? 'No proporcionado';
+$estudios = $_GET['estudios'] ?? '';
+$nacionalidad = $_GET['nacionalidad'] ?? '';
+$idiomas = $_GET['idiomas'] ?? '';
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Éxito</title>
+</head>
+<body>
+    <h1>¡Procesado con éxito!</h1>
+    <p>Se han recibido los siguientes datos mediante la cabecera URL:</p>
+    
+    <ul>
+        <!-- Usamos htmlspecialchars por seguridad al mostrar datos [17] -->
+        <li><strong>Nombre:</strong> <?php echo htmlspecialchars($nombre); ?></li>
+        <li><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></li>
+        <li><strong>Estudios:</strong> <?php echo htmlspecialchars($estudios); ?></li>
+        <li><strong>Nacionalidad:</strong> <?php echo htmlspecialchars($nacionalidad); ?></li>
+        <li><strong>Idiomas:</strong> <?php echo htmlspecialchars($idiomas); ?></li>
+    </ul>
+
+    <hr>
+    <p>Nombre del alumno: <strong>[Tu Nombre Aquí]</strong></p>
+    <p>Grupo: <strong>[Tu Grupo Aquí]</strong></p>
+    
+    <button onclick="window.location.href='index.php'">Volver</button>
+</body>
+</html>
