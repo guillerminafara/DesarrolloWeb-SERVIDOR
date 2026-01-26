@@ -9,10 +9,18 @@
 
 <body>
     <?php
-    $nombre = $_GET["nombre"];
-    echo "$nombre";
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $nombre = $_GET["nombre"];
+        echo "$nombre";
+        $nombre = $_GET["apellido"];
+        echo "$apellido";
+        $nombre = $_GET["nacionalidad"];
+        echo "$nacionalidad";
+        $nombre = $_GET["idioma"];
+        echo "$idioma";
+        echo "ver";
+    }
 
-    echo"ver";
     ?>
 </body>
 

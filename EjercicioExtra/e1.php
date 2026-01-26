@@ -5,11 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        #mal {
-            color: red;
-        }
-    </style>
+
 </head>
 
 <body>
@@ -37,7 +33,7 @@
 
         <h3>Idioma</h3>
         <label>Selecciona un idioma</label>
-        <select name="idioma[]" id="idioma" required>
+        <select name="idioma[]" id="idioma" multiple required>
             <option value="">Selecciona un idioma</option>
             <option value="Español">Español</option>
             <option value="Inglés">Inglés</option>
@@ -58,7 +54,7 @@
     </form>
 
     <?php
-
+    $errores = [];
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $nombre = $_POST["nombre"];
         $apellido = $_POST["apellido"];
@@ -66,16 +62,16 @@
         $nivelEstudios = $_POST["nivelEstudios"];
         $nacionalidad = $_POST["nacionalidad"];
         $idioma = $_POST["idioma"];
-        if (($contraseña) < 6) {
+        if (strlen($contraseña) < 6) {
 
-            echo " <p id='mal'>La contraseña debe contener al menos 6 carácteres</p>";
+            $errores[] = " La contraseña debe contener al menos 6 carácteres";
         }
         if (!comprobarMail($mail)) {
-            echo "<p id='mal'>Formato de contraseña no válida</p>";
+            $errores[] = "Formato de contraseña no válida";
 
         }
         if (ctype_alnum($nombre) && ctype_alnum($apellido)) {
-            echo "<p id='mal'>Formato de nombre no válido</p>";
+            $errores[] = "Formato de nombre no válido";
         }
 
 
@@ -91,9 +87,17 @@
 
             // '<a href="salida.php?user="$"></a>';
     
-        }else{
-            echo "<p id='mal'>Formato o tamaño no válido</p>";
+        } else {
+            $errores[] = "Formato o tamaño no válido";
 
+        }
+
+        if (count($errores) > 0) {
+            leerErrores($errores);
+        } elseif (count($errores) === 0) {
+            echo "<p style='color: green;>FORMULARIO VALIDADO </p>";
+            header("Location: salida.php?nombre=$nombre?apellido=$apellido?Nacionalidad=$nacionalidad?nivelEstudios=$nivelEstudios?idiomas=$idioma?imagen=$imagen");
+            exit;
         }
     }
     function comprobarFormato($extraer)
@@ -110,7 +114,15 @@
 
     }
 
+    function leerErrores($errores)
+    {
+        echo " <ul>";
+        foreach ($errores as $error) {
+            echo "<li style='color: red;' > $error</li> ";
+        }
+        echo " </ul>";
 
+    }
 
     ?>
 </body>
