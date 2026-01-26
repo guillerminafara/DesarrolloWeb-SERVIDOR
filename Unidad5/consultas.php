@@ -4,7 +4,13 @@
  * Ejercicio 2 UP5. Consultas
  */
 include_once __DIR__ . '\..\..\db.php';
-
+try{
+$db= new PDO("mysql:host=localhost;port=3306;dbname=empresa","root","root");
+}catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+}   
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+$mysql=new mysqli("localhost:3306", "root", "root","empresa");
 // Verifica si se ha enviado el formulario
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Conecta a la base de datos (ajusta los detalles de la conexión según tu configuración)
