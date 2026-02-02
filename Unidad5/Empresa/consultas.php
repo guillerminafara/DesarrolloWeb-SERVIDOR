@@ -3,24 +3,35 @@
  * @autor Silvia Vilar
  * Ejercicio 2 UP5. Consultas
  */
-include_once __DIR__ . '\..\..\db.php';
+include_once "DBConfig.php";
 
 // Verifica si se ha enviado el formulario
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // function obtenerConexion()
+    // {
+    //     global $options;
+    //     try {
+    //         return new PDO("mysql:host=" . HOST . "dbname=" . DBNAME, USERNAME, PASSWORD, $options);
+    //     } catch (PDOException $e) {
+    //         die("ERROR al conectar con la BD" . $e->getMessage());
+    //     }
+    // }
     // Conecta a la base de datos (ajusta los detalles de la conexión según tu configuración)
     try {
-        $db = new PDO("mysql:host=localhost;port=3306;dbname=empresa", "root", "root");
+       global $pdo = new PDO("mysql:host=localhost;port=3306;dbname=empresa", "root", "root");
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
     }
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
     $mysql = new mysqli("localhost:3306", "root", "root", "empresa");
     // Determina el tipo de consulta
 
     switch (true) {
         //consultas de Clientes
         case 'ClientePorDni':
+            $result= $pdo-> prepare ("select * from empresa where DNI=?")
             //Datos de cliente por DNI
+            $result->execute(array("384343459"));
 
             break;
 
