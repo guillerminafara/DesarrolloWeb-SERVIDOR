@@ -3,7 +3,7 @@
  * @author Silvia Vilar
  * Ej1UD9 - mainIncidencia.php
  */ 
-include_once "Incidencia_guillermina.php";
+include_once "Incidencia.php";
 Incidencia::resetearBD();
 $inc1 = Incidencia::creaIncidencia(105, "No tiene acceso a internet");
 $inc2 = Incidencia::creaIncidencia(14, "No arranca");

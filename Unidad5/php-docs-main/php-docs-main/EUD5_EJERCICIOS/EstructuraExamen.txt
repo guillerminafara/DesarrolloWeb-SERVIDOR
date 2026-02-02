@@ -1,0 +1,20 @@
+examen/
+    app/
+        controllers/
+            aprendizcontrollers.php
+        database/
+            database.php
+        models/
+            aprendiz.php
+        views/
+            form.php
+
+    validaciones.php
+
+    public/
+        uploads/
+        index.php
+        resultado.php
+        volver.php
+
+volver.php validaciones.php index.php no habra q modificar nada
