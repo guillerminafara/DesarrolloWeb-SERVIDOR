@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // }
     // Conecta a la base de datos (ajusta los detalles de la conexión según tu configuración)
     try {
-       global $pdo = new PDO("mysql:host=localhost;port=3306;dbname=empresa", "root", "root");
+       $pdo = new PDO("mysql:host=localhost;port=3306;dbname=empresa", "root", "root");
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
     }
