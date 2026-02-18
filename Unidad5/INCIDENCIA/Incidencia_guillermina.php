@@ -33,7 +33,7 @@ class Incidencia
     {
         global $options;
         try {
-            return new PDO("mysql:host=" . HOST . "dbname=" . DBNAME, USERNAME, PASSWORD, $options);
+            return new PDO("mysql:host=" .HOST . "dbname=" . DBNAME, USERNAME, PASSWORD, $options);
         } catch (PDOException $e) {
             die("ERROR al conectar con la BD" . $e->getMessage());
         }

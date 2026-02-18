@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @autor Silvia Vilar
  * Ejercicio 2 UP5. Consultas
@@ -7,18 +8,9 @@ include_once "DBConfig.php";
 
 // Verifica si se ha enviado el formulario
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // function obtenerConexion()
-    // {
-    //     global $options;
-    //     try {
-    //         return new PDO("mysql:host=" . HOST . "dbname=" . DBNAME, USERNAME, PASSWORD, $options);
-    //     } catch (PDOException $e) {
-    //         die("ERROR al conectar con la BD" . $e->getMessage());
-    //     }
-    // }
-    // Conecta a la base de datos (ajusta los detalles de la conexión según tu configuración)
+
     try {
-       $pdo = new PDO("mysql:host=localhost;port=3306;dbname=empresa", "root", "root");
+        $pdo = new PDO("mysql:host=localhost;port=3306;dbname=empresa", "root", "root");
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
     }
@@ -29,20 +21,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     switch (true) {
         //consultas de Clientes
         case 'ClientePorDni':
-            $result= $pdo-> prepare ("select * from empresa where DNI=?")
+            $dni = readline("Introduce el dni del CLIENTE: ");
+            $result = $pdo->prepare("select * from CLIENTE where DNI=?");
             //Datos de cliente por DNI
-            $result->execute(array("384343459"));
+            $result->execute(array($dni));
 
             break;
 
         case 'ListadoClientes':
             //Listado de todos los clientes ordenados por dni de cliente
-
+            $result = $pdo->prepare("select * from CLIENTE order by DNI");
+            $result->execute();
             break;
 
         case 'ClientesDadapoblacion':
             //Datos de Clientes de una Población seleccionada ordenados por dni de cliente
 
+            $poblacion = readline("Introduce la poblacion del CLIENTE: ");
+            $result = $pdo->prepare("select * from CLIENTE where POBLACION=? order by DNI");
+            $result->execute(array($poblacion));
             break;
         case 'ListadoClientesPorPoblacion':
             //Listado de Clientes de una población seleccionada ordenados por población
@@ -51,16 +48,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         case 'NumeroClientesPorPoblacion':
             //Listado de Clientes de una población seleccionada ordenados por población
-
+            $result = $pdo->prepare("select count(*) from CLIENTE group by POBLACION order by POBLACION");
+            $result->execute();
             break;
 
         case 'ListadoClientesConCompras':
             //Datos de Clientes que han realizado compras ordenados por dni de cliente
-
+            $result = $pdo->prepare("SELECT CLIENTE.DNI, CLIENTE.NOMBRE FROM CLIENTE JOIN COMPRA ON (CLIENTE.DNI = COMPRA.DNI) ORDER BY DNI ");
+            $result->execute();
             break;
         case 'ListadoClientesSinCompras':
             //Datos de Clientes que no han realizado compras ordenados por dni de cliente
-
+            $result = $pdo->prepare("SELECT * FROM CLIENTE LEFT JOIN COMPRA ON (CLIENTE.DNI=COMPRA.DNI) ORDER BY CLIENTE.DNI");
+            $result->execute();
             break;
         case 'ListadoClientesConComprasDadaPoblacion':
             //Datos de Clientes que han realizado compras de una población seleccionada ordenados por dni de cliente
@@ -268,49 +268,49 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <select name="dni" id="dni">
             <?php
             // Conecta a la base de datos (ajusta los detalles de la conexión según tu configuración)
-            
+
 
             // Obtiene los dnis de la base de datos
-            
+
             // Recorre y muestra los dnis en el select simple como opciones
-            
+
             ?>
         </select>
         <label for="poblacion">población:</label>
         <select name="poblacion" id="poblacion">
             <?php
             // Conecta a la base de datos (ajusta los detalles de la conexión según tu configuración)
-            
+
 
             // Obtiene los dnis de la base de datos
-            
+
 
             // Recorre y muestra poblaciones en el select simple como opciones
-            
+
             ?>
         </select>
         <label for="proveedor">proveedor:</label>
         <select name="proveedor" id="proveedor">
             <?php
             // Conecta a la base de datos (ajusta los detalles de la conexión según tu configuración)
-            
+
 
             // Obtiene los proveedores de la base de datos
-            
+
             // Recorre y muestra los dnproveedores en el select simple como opciones
-            
+
             ?>
         </select>
         <label for="producto">producto:</label>
         <select name="producto" id="producto">
             <?php
             // Conecta a la base de datos (ajusta los detalles de la conexión según tu configuración)
-            
+
 
             // Obtiene los productos de la base de datos
-            
+
             // Recorre y muestra los productos en el select simple como opciones
-            
+
             ?>
         </select>
         <label for="parametro">Parámetro de consulta:</label>
