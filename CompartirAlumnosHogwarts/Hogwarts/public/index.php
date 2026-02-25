@@ -9,4 +9,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Si NO hay POST, mostramos el formulario vacío
 require_once __DIR__ . "/../app/views/form.php";
-// require_once __DIR__ . "/../app/validaciones.php";
+require_once __DIR__ . "/../app/validaciones.php";

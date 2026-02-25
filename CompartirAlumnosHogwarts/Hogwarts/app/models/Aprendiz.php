@@ -15,7 +15,7 @@ class Aprendiz
     public $nivelMagico;
     public $foto;
     public $fecha;
-
+    static public $pdo; // pdo statico a modo patrón de diseño singleton para evitar repetir conexiones
     public function __construct($nombre, $casa, $varitas, $asignaturas, $nivelMagico, $foto)
     {
         /**
@@ -27,22 +27,25 @@ class Aprendiz
         $this->asignaturas = is_array($asignaturas) ? implode(",", $asignaturas) : $asignaturas;
         $this->nivelMagico = $nivelMagico;
         $this->foto = $foto;
-        $this->fecha = time('Y-m-d H:i:s');
+        $this->fecha = date('Y-m-d H:i:s');
+        self::conectarA();
     }
-
-
-
+    //funcion estática para conectar con base de datos y obtener el pdo
+    private static function conectarA()
+    {
+        if (self::$pdo === null) {
+            self::$pdo = new Database();
+            self::$pdo  = self::$pdo->conectar();
+        }
+    }
+//función para crear alumnos en la base de datos
     public function guardar()
     {
         /**
          * Guarda el aprendiz en la base de datos
          * Devuelve el ID del aprendiz insertado
          */
-
-        $pdo = new Database();
-        $pdo = $pdo->conectar();
-        $result = $pdo->prepare("INSERT INTO aprendices (nombre, casa, varita, asignaturas, nivel, foto, fecha_registro)values(?,?,?,?,?,?,?)");
-
+        $result = self::$pdo->prepare("INSERT INTO aprendices (nombre, casa, varita, asignaturas, nivel, foto, fecha_registro)values(?,?,?,?,?,?,?)");
         $result->execute(array(
             $this->nombre,
             $this->casa,
@@ -54,8 +57,32 @@ class Aprendiz
         ));
         $rowsAffected = $result->rowCount();
         if ($rowsAffected > 0) {
-            echo "Aprendiz agregado exitosamente";
-            return $pdo->lastInsertId();
+            return self::$pdo->lastInsertId();
+        }
+    }
+//funcioon para buscar aprendices por id, devuelde un aprendiz
+    static function buscarAprendizById($id)
+    {
+        self::conectarA();
+        $sql = "SELECT * FROM aprendices where id=?";
+        $result = self::$pdo->prepare($sql);
+        $result->execute([$id]);
+        $rowsAffected = $result->rowCount();
+
+        $data = $result->fetch();
+
+        if ($rowsAffected === 0) {
+            return "no se pudo encontrar al aprendiz";
+        } else {
+            $aprendiz = new Aprendiz(
+                $data["nombre"],
+                $data["casa"],
+                explode(",", $data["varita"]),
+                explode(",", $data["asignaturas"]),
+                $data["nivel"],
+                $data["foto"]
+            );
+            return $aprendiz ?: null;
         }
     }
 }

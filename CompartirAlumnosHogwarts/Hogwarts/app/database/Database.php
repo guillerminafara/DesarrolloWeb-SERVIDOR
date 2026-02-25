@@ -5,10 +5,15 @@ class Database {
      * Configuración de la base de datos
      */
 
-    private $host = "192.168.1.200:3306";
-    private $db = "guillermina";
-    private $usuario = "dwes";
-    private $contrasena = "dbwespass";
+    // private $host = "192.168.1.200:3306";
+    private $host = "127.0.0.1:3306";
+
+    private $db = "aprendices";
+    // private $usuario = "dwes";
+    private $usuario = "root";
+    // private $contrasena = "dbwespass";
+
+    private $contrasena = "1234";
     private $charset = "utf8mb4";
 
     public function conectar() {

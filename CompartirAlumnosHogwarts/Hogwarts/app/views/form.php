@@ -14,7 +14,6 @@ require_once(__DIR__ . "/../controllers/AprendizController.php");
  * @author Guillermina fara <email>
  */
 
-
 $error = array();
 $valida = false;
 if (!isset($_SESSION["token"])) {
@@ -26,15 +25,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     //en el if en boton de file solo debe aparecer si no existe en la sesion el file. si ya existe que muestre mensaje de foto subida 
     $nombre = $_POST["nombre"] ?? "";
     $casa = $_POST["casa"] ?? "";
-    $varitas = isset($_POST["varitas"]) ? implode(",", $_POST["varitas"]) : [];
-    $asignaturas = isset($_POST["asignaturas"]) ? implode(",", $_POST["asignaturas"]) : [];
+    $varitas = isset($_POST["varitas"]) ? implode(",", $_POST["varitas"]) : []; //$_POST["varitas"] ?? []; 
+    $asignaturas = isset($_POST["asignaturas"]) ? implode(",", $_POST["asignaturas"]) : []; //  $_POST["asignaturas"] ?? [];
     $foto = $_FILES["foto"] ?? null;
     $nivel = $_POST["nivelMagico"] ?? "";
     $tamano_maximo = $_POST["tamano_maximo"];
 
 
     // Comprobar token CSRF y finalizar si no es válido
-
     if (!isset($_POST["token"])) {
         die("Acceso no permitido.");
     } else {
@@ -47,18 +45,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     /// si enviar se muestra es porque validar ya supero correctamente y desaparece validar
     if (isset($_POST["enviar"])) {
         $controller = new AprendizController();
-        $idGenerado= $controller->guardar($nombre, $casa, $varitas, $asignaturas, $nivel,$foto);
-        $_SESSION["alumnos"] = array(
-            // $conjunto = array(
-            "nombre" => $nombre,
-            "casa" => $casa,
-            "varitas" => explode(",", $varitas),
-            "asignaturas" => explode(",", $asignaturas),
-            "nivel" => $nivel,
-            "foto" => $foto ?? null,
-            "fecha_registro" => time() //date("Y-m-d H:i:s")
-        );
+        $idGenerado = $controller->guardar($_SESSION["alumnos"]["nombre"], $_SESSION["alumnos"]["casa"], $_SESSION["alumnos"]["varitas"], $_SESSION["alumnos"]["asignaturas"], $_SESSION["alumnos"]["nivel"], $_SESSION["alumnos"]["foto"]);
+        $_SESSION["alumnos"]["id"] = $idGenerado;
         header("Location: resultado.php");
+        // header("Location: resultado.php?id=".$idGenerado);
         exit();
     }
     /**
@@ -99,44 +89,52 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($foto) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
             $extensiones = ["jpg", "jpeg", "png"];
             $tipo = $foto["type"];
+            // Validar extensiones y tamaño de la foto.
             $extension = explode("/", $tipo);
             if ($foto["size"] >= $tamano_maximo) {
                 $error[] = "La foto no puede superar los 2MB";
             }
 
-
-            // Validar extensiones y tamaño de la foto.
             if (!in_array($extension[1], $extensiones)) {
                 $error[] = "Extensión no válida";
-            } else {
-                //    foreach ($arrayTipo as $a){
-                //         echo "ver: $a";
-                //    }
             }
-            if (empty($errores)) {
-                $carpeta = "uploads/";
-                if (!is_dir($carpeta)) {
-                    mkdir($carpeta, 0777, true);
+
+            //Si todo OK, guardar datos de la foto en sesión
+            if (empty($error)) {
+                $dir = __DIR__ . "/../../public/uploads/";
+                if (!is_dir($dir)) {
+                    mkdir($dir, 0777, true);
                 }
                 $nombreFoto = $nombre . "_" . time() . "." . $extension[1];
-
-                if (move_uploaded_file($foto["tmp_name"], $dir . $nombreFoto)) {
-                    $_SESSION["foto"] = $nombreFoto;
+                //Si no hay foto en sesión, validamos la subida
+                // Validar que se ha subido una foto
+                if (empty($_SESSION["foto"])) {
+                    if (move_uploaded_file($foto["tmp_name"], $dir . $nombreFoto)) {
+                        $_SESSION["foto"] = $nombreFoto;
+                    } else {
+                        $error[] = "Error al subir la foto al servidor";
+                    }
                 } else {
-                    $error[] = "Error al subir la foto al servidor";
+                    $error[] ="Limpiar sesiones". $_SESSION["foto"];
                 }
             }
         } else {
             $error[] = "Debes subir una foto";
         }
 
-        //Si no hay foto en sesión, validamos la subida
-
-        // Validar que se ha subido una foto
-
-        //Si todo OK, guardar datos de la foto en sesión
         if (empty($error)) {
             $valida = true;
+            $_SESSION["alumnos"] = array(
+                // $conjunto = array(
+                "id" => "",
+                "nombre" => $nombre,
+                "casa" => $casa,
+                "varitas" => $varitas, // explode(",", $varitas),
+                "asignaturas" => $asignaturas, //explode(",", $asignaturas),
+                "nivel" => $nivel,
+                "foto" => $nombreFoto ?? null,
+                "fecha_registro" => time() //date("Y-m-d H:i:s")
+            );
         }
     }
 }
