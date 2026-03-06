@@ -1,0 +1,101 @@
+
+
+    // Ejecuta la consulta si está definida
+    if (isset($query)) {
+        //ejecutamos la consulta con los parámetros (si los hay) y obtenemos un vector asociativo
+        $db =  new Database();
+        $pdo = $db->conectar();
+        $result = $pdo->prepare($query);
+        $result->execute([$parametros]);
+        $salida = $result->fetchAll();
+        header('Content-Type: application/json; charset=UTF-8');
+        echo json_encode($salida, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    }
+
+    // Cierra la conexión (iguala a null)
+
+
+    // Devuelve los resultados como JSON si hay resultados
+
+
+[ 
+    {
+        "DNI": "00371569G",
+        "NOMBRE": "Beatriz",
+        "APELLIDOS": "García Martín",
+        "DIRECCION": "C\/ Lliria, 8",
+        "POBLACION": "Manises",
+        "TELEFONO": "961546852",
+        "FECHA_NAC": "1975-06-25"
+    }
+]
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ejercicios Consulta</title>
+</head>
+
+<body>
+    <h1>Consultas de la BD Empresa</h1>
+    <form action="consultas.php" method="post">
+        <label for="tipoConsulta">Tipo de consulta:</label>
+        <select name="tipoConsulta" id="tipoConsulta">
+            <option value="ClientePorDni">Cliente dado DNI</option>
+            <option value="ListadoClientes">Listado Clientes</option>
+            <option value="ClientesDadaPoblacion">Clientes de una población</option>
+            <option value="ListadoClientesPorPoblacion">Listado de Clientes por población</option>
+            <option value="NumeroClientesPorPoblacion">Número de Clientes por población</option>
+            <option value="ListadoClientesConCompras">Clientes con Compras</option>
+            <option value="ListadoClientesSinCompras">Clientes sin Compras</option>
+            <option value="ListadoClientesConCompraDadaPoblacion">Clientes con Compras de una población</option>
+            <option value="ListadoClientesSinCompraDadaPoblacion">Clientes sin Compras de una población</option>
+            <option value="ListadoClientesConComprasValencia">Clientes con Compras de Valencia</option>
+            <option value="ListadoClientesConTresOMasCompras">Clientes con 3 Compras o más</option>
+            <option value="ListadoClientesConTresComprasOMasPorPoblacion">Clientes con 3 Compras o más de una población
+            </option>
+            <option value="ProveedorPorNif">PROVEEDOR dado NIF</option>
+            <option value="ListadoProveedores">Listado de Proveedores</option>
+            <option value="ProveedoresEmpiezanPorTexto">Proveedores que empiezan por un texto</option>
+            <option value="ProveedoresProductosPvpMayor1000">Proveedores con Productos con precio mayor a 1000€</option>
+            <option value="ProductoPorCodProd">Producto dado codigo</option>
+            <option value="ListadoProductos">Listado de Productos</option>
+            <option value="ProductosPvpMenorOIgual100">Productos con precio menor a 100</option>
+            <option value="ProductosPvpMayorPromedio">Productos con precio mayor al promedio</option>
+            <option value="PvpMaximoProductos">Pvp máximo de los Productos</option>
+            <option value="PvpMinimoProductos">Pvp mínimo de los Productos</option>
+            <option value="PvpPromedioProductos">Pvp promedio de los Productos</option>
+            <option value="ProductosNombreContieneTexto">Productos cuyo Nombre contiene un texto</option>
+            <option value="ListadoCompras">Listado de Compras</option>
+            <option value="ComprasDeAnyo">Compras a partir de un año dado</option>
+            <option value="ComprasDeCliente">Compras de un Cliente dado</option>
+            <option value="ComprasDeProducto">Compras de un Producto dado</option>
+            <option value="ComprasDeProveedor">Compras de un Proveedor dado</option>
+            <option value="ComprasDePoblacion">Compras de una población dada</option>
+            <option value="ComprasDeClientesValencia">Compras con algún Cliente de la población de Valencia</option>
+            <option value="ComprasConIgualOMasDe2Unidades">Compras con 2 unidades o más</option>
+            <option value="ComprasConMasDe3Productos">Compras con más de 3 Productos</option>
+            <option value="ComprasMinimo10Unidades">Compras con un mínimo de 10 unidades</option>
+        </select>
+        </select><br>
+        <label for="dni">dni:</label>
+        <select name="dni" id="dni">
+
+            <option value='00371569G'>00371569G</option><option value='00445760C'>00445760C</option><option value='00740365H'>00740365H</option><option value='02748375J'>02748375J</option><option value='03549358K'>03549358K</option><option value='07385709H'>07385709H</option><option value='07834658F'>07834658F</option><option value='08785691J'>08785691J</option><option value='09856064N'>09856064N</option><option value='12348630E'>12348630E</option><option value='23503875Z'>23503875Z</option><option value='24589635J'>24589635J</option><option value='28759595G'>28759595G</option><option value='37409800R'>37409800R</option><option value='43809540Z'>43809540Z</option><option value='58347695F'>58347695F</option>        </select><br>
+        <label for="poblacion">población:</label>
+        <select name="poblacion" id="poblacion">
+            <option value='Manises'>Manises</option><option value='Alboraya'>Alboraya</option><option value='Torrente'>Torrente</option><option value='Valencia'>Valencia</option><option value='Valencia'>Valencia</option><option value='Alboraya'>Alboraya</option><option value='Mislata'>Mislata</option><option value='Valencia'>Valencia</option><option value='Mislata'>Mislata</option><option value='Mislata'>Mislata</option><option value='Torrente'>Torrente</option><option value='Manises'>Manises</option><option value='Valencia'>Valencia</option><option value='Alfafar'>Alfafar</option><option value='Alfafar'>Alfafar</option><option value='Mislata'>Mislata</option>        </select><br>
+        <label for="proveedor">proveedor:</label>
+        <select name="proveedor" id="proveedor">
+            <option value='A12345678'>APP INFORMÁTICA</option><option value='G45632598'>MEDIAMARKT</option><option value='T98723467'>PCBOX</option>        </select> <br>
+        <label for="producto">Producto:</label>
+        <select name="producto" id="producto">
+            <option value='P0001'>MONITOR</option><option value='P0002'>TECLADO</option><option value='P0003'>RATÓN</option><option value='P0004'>ALTAVOCES</option><option value='P0005'>PC SOBREMESA</option><option value='P0006'>MINI PC</option><option value='P0007'>PC ALL IN ONE</option><option value='P0008'>PC PORTÁTIL GAMING</option><option value='P0009'>PC PORTÁTIL</option><option value='P0010'>PC PORTÁTIL CONVERTIBLE</option><option value='P0011'>ALTAVOCES</option><option value='P0012'>ALTAVOCES</option>        </select><br>
+        <label for="parametro">Parámetro de consulta:</label>
+        <input type="text" name="parametro" id="parametro">
+        <br>
+        <input type="submit" value="Consultar">
+
+</body>
+
+</html>

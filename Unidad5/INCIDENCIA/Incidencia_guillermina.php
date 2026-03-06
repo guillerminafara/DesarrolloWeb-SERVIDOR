@@ -4,7 +4,7 @@
  * @author Guillermina Fara 
  */
 
-require_once "BDConfig.php";
+require_once __DIR__ . "/BDConfig.php";
 class Incidencia
 {
 
@@ -14,7 +14,7 @@ class Incidencia
     public $codigo = 0;
     public $estado;
     public static $pendientes = 0;
-
+    static public $pdo;
     function __construct($numPuesto, $problema)
     {
         if (is_int($numPuesto)) {
@@ -28,113 +28,123 @@ class Incidencia
         $this->estado = "pendiente";
         self::$pendientes++;
     }
-
+    //Función para crear una conexión 
     private static function obtenerConexion()
     {
-        global $options;
-        try {
-            return new PDO("mysql:host=" .HOST . "dbname=" . DBNAME, USERNAME, PASSWORD, $options);
-        } catch (PDOException $e) {
-            die("ERROR al conectar con la BD" . $e->getMessage());
+        if (self::$pdo === null) {
+            $db = new BDConfig();
+            self::$pdo  =  $db->conectar();
         }
     }
-    //eliminamos toda la base de datos 
+    //Vaciamos la tabla incidencia de la base de datos 
     public static function resetearBD()
     {
-        $pdo = self::obtenerConexion();
+        self::obtenerConexion();
         $sql = "DELETE FROM INCIDENCIA";
-        $pdo->exec($sql);
+        $result = self::$pdo->prepare($sql);
+        $result->execute();
+
+        self::$contador = 0;
+        self::$pendientes = 0;
+
+        echo "Base de datos reiniciada correctamente\n";
     }
+    //Método para crear incidencias  
     static function creaIncidencia($numPuesto, $problema)
     {
         $incidencia = new Incidencia($numPuesto, $problema);
-        $pdo = self::obtenerConexion();
-        $result = $pdo->prepare("INSERT INTO INCIDENCIAS(CODIGO,ESTADO, PUESTO, PROBLEMA) VALUES(?,?,?,? )");
+        self::obtenerConexion();
+        $result = self::$pdo->prepare("INSERT INTO INCIDENCIA(CODIGO,ESTADO, PUESTO, PROBLEMA) VALUES(?,?,?,? )");
         $exito = $result->execute([$incidencia->codigo, $incidencia->estado, $incidencia->numPuesto, $incidencia->problema]);
 
         if ($exito === true) {
             $valor = $incidencia->codigo;
-            echo "Incidencia creada con exito";
+            echo "Incidencia creada con exito con el código $valor \n";
             self::leeIncidencia($valor);
         } else {
-            echo "Error al crear la Incidencia ";
+            echo "Error al crear la Incidencia \n";
         }
 
         return $incidencia;
     }
+    //función que lee todas las incidencias de la base de datos
     static function leeTodasIncidencias()
     {
-        $pdo = self::obtenerConexion();
-        $SqlSelect = $pdo->prepare("SELECT * FROM INCIDENCIA;");
+        self::obtenerConexion();
+        $SqlSelect = self::$pdo->prepare("SELECT * FROM INCIDENCIA;");
         $SqlSelect->execute();
         $result = $SqlSelect->fetchAll();
-        print "<table border='1'>";
+        print "\n------------Leer todas las Incidencias: ---------\n";
         foreach ($result as $row) {
-            print "<tr><th>CODIGO</th><th>ESTADO</th><th>PUESTO</th><th>PROBLEMA</th></tr>";
-            print "<tr><td>$row[CODIGO]</td><td>$row[ESTADO]</td><td>$row[PUESTO]</td><td>$row[PROBLEMA]</td></tr>";
+            print "Incidencia: " . $row["CODIGO"] . " - Estado: " . $row["ESTADO"] . " - Puesto: " . $row["PUESTO"] . " - Problema: " . $row["PROBLEMA"] . "\n";
         }
-        print "</table>";
     }
+    //Función que lee la incidencia con el código dado 
     static function leeIncidencia($codigo)
     {
-        $pdo = self::obtenerConexion();
-        $result = $pdo->prepare("SELECT * FROM INCIDENCIA WHERE CODIGO=?");
+        $result = self::$pdo->prepare("SELECT * FROM INCIDENCIA WHERE CODIGO=?");
         $result->execute(array($codigo));
-        $rowsAffect = $result->fetchColumn();
-        if ($rowsAffect) {
-            print "Se han obtenido " . $rowsAffect . " filas." . "<br>";
 
-            print "<table border=none>";
-            print "<tr><th>CODIGO</th><th>ESTADO</th><th>PUESTO</th><th>PROBLEMA</th></tr>";
-            foreach ($result as $row) {
-                print "<tr><td>$row[CODIGO]</td><td>$row[ESTADO]</td><td>$row[PUESTO]</td><td>$row[PROBLEMA]</td></tr>";
-            }
-            print "</table>";
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        if ($row) {
+            print "Incidencia: " . $row["CODIGO"] . " - Estado: " . $row["ESTADO"] . " - Puesto: " . $row["PUESTO"] . " - Problema: " . $row["PROBLEMA"] . "\n";
         }
     }
-
-    function actualizaIncidencia($CODIGO, $PROBLEMA, $PUESTO, $ESTADO)
+    //Método para actualizar la incidencia 
+    function actualizaIncidencia($CODIGO, $problema, $PUESTO, $ESTADO)
     {
-        $pdo = self::obtenerConexion();
-        $result = $pdo->prepare("UPDATE FROM INCIDENCIA SET PROBLEMA=? WHERE CODIGO=?");
-        $result->execute(array($PROBLEMA, $this->codigo));
-        $rowsAffected = $result->fetchColumn();
+        self::obtenerConexion();
+        // actualizamos el problema en el objeto tambien
+        if ($problema != "") {
+            $this->problema = $problema;
+        }
+        $result = self::$pdo->prepare("UPDATE INCIDENCIA SET PROBLEMA=? WHERE CODIGO=?");
+        $result->execute([$this->problema, $this->codigo]);
+        $rowsAffected = $result->rowCount();
         if ($rowsAffected > 0) {
-            echo "<p>Incidencia actualizada con exito</p>";
+            echo "Incidencia $this->codigo actualizada con éxito\n";
         } else {
-            echo "<p>La Incidencia no pudo ser actualizada</p>";
+            echo "La Incidencia no pudo ser actualizada\n";
         }
     }
-
-    function borrarIncidencia()
+    //funcion que borra una incidencia de la base de datos
+    function borraIncidencia()
     {
-        $pdo = self::obtenerConexion();
-        $result = $pdo->prepare("DELETE FROM INCIDENCIA WHERE CODIGO=?");
+        self::obtenerConexion();
+        $result = self::$pdo->prepare("DELETE FROM INCIDENCIA WHERE CODIGO=?");
         $rowsAffecteed = $result->execute(array($this->codigo));
         if ($rowsAffecteed > 0) {
-            echo "<p>Incidencia $this->codigo borrada con exito</p>";
+            echo "Incidencia $this->codigo borrada con exito\n";
         } else {
-            echo "<p>La Incidencia no pudo ser borrada</p>";
+            echo "La Incidencia no pudo ser borrada \n";
         }
 
         self::leeTodasIncidencias();
     }
+    //Método que recupera las incidencias pendientes
     static function getPendientes()
     {
         return self::$pendientes;
     }
+    //Método que actualiza la incidencia cuando esta ha sido resuelta
     function resuelve($solucion)
     {
+        self::obtenerConexion();
         $this->estado = "resuelta";
         self::$pendientes--;
+        $sql = "UPDATE INCIDENCIA set ESTADO=?, PROBLEMA=? where CODIGO=?";
+        $result = self::$pdo->prepare($sql);
+        $result->execute([$this->estado, $solucion, $this->codigo]);
     }
+    //Mñetodo para conseguir el código de la incidencia
     function getCodigo()
     {
-        return self::$pendientes;
+        return $this->codigo;
     }
 
     function __toString()
     {
-        return "Incidencia " . (string) $this->codigo . " -Puesto:" . (string) $this->numPuesto . " - $this->problema" . "<br>";
+        return "Incidencia: " . (string) $this->codigo . " -Puesto:" . (string) $this->numPuesto . " - $this->problema\n";
     }
 }

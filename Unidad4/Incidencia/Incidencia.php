@@ -36,8 +36,10 @@ class Incidencia
         self::$pendientes--;
     }
 
+
     function __toString()
     {
         return "Incidencia " . (string)$this->codigo . " -Puesto:" . (string)$this->numPuesto . " - $this->informacion" . "<br>";
     }
+    
 }
