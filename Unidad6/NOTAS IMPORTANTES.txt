@@ -1,0 +1,6 @@
+notas: para poder hacer pruebas con endpoints he comentado las siguientes líneas en index.php porque sino no me dejaba avanzar con los datos. Para probar lo de sesiones descomentar estas líneas
+// if (!isset($_SESSION["personaje"])) {
+//     http_response_code(401);
+//     echo "Debe iniciar sesión para acceder a este recurso.";
+//     exit;
+// }

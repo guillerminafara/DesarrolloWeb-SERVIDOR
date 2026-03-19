@@ -1,0 +1,31 @@
+### GET /students (index)
+GET http://localhost:8000/students HTTP/1.1
+Accept: application/json
+
+
+### GET /students/1 (show)
+GET http://localhost:8000/students/1 HTTP/1.1
+Accept: application/json
+
+
+### POST /students (store)
+POST http://localhost:8000/students HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Vanesa"
+}
+
+
+### PUT /students/6 (update)
+PUT http://localhost:8000/students/6 HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Vanesa Updated"
+}
+
+
+### DELETE /students/6 (destroy)
+DELETE http://localhost:8000/students/6 HTTP/1.1
+Accept: application/json
