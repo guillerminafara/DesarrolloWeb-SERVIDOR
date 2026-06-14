@@ -1,0 +1,44 @@
+### GET /planetas/importarSWAPI (index)
+GET http://localhost:8000/planetas/importarSWAPI HTTP/1.1
+Accept: application/json
+
+
+### GET /planetas (index)
+GET http://localhost:8000/planetas HTTP/1.1
+Accept: application/json
+
+
+### GET /planetas/4 (show)
+GET http://localhost:8000/planetas/4 HTTP/1.1
+Accept: application/json
+
+
+### POST /planetas (store)
+POST http://localhost:8000/planetas HTTP/1.1
+Content-Type: application/json
+
+{
+  "nombre": "MiTierra",
+  "horasDia": 24,
+  "diasAnyo": 365,
+  "clima": "templado, mediterraneo",
+  "terreno": "llanuras, rios, mares, acantilados"
+
+}
+
+
+### PUT /planetas/4 (update)
+PUT http://localhost:8000/planetas/4 HTTP/1.1
+Content-Type: application/json
+
+{ "nombre": "Bespin",
+  "horasDia": 15,
+  "diasAnyo": 5110,
+  "clima": "templado",
+  "terreno": "variado, gasoso, nubes, acantilados"
+}
+
+
+### DELETE /planetas/4 (destroy)
+DELETE http://localhost:8000/planetas/4 HTTP/1.1
+Accept: application/json
